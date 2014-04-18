@@ -7,7 +7,7 @@
 uint16_t offset = 0ul;
 
 uint16_t data_table[512];
-uint16_t begin_delay = 7900+offset;
+uint16_t begin_delay = 7500+offset;
 uint16_t end_delay = 47500ul;
 uint16_t sync_timeout_delay = 60000ul;
 
@@ -15,7 +15,7 @@ static uint8_t laser_state;
 volatile uint8_t write_line_enable = 1;
 static uint16_t last_line_start;
 
-int exposing_cycle_count = 40;
+int exposing_cycle_count = 20;
 int exposing_cycles = 0;
 uint8_t exposing_done = 0;
 
@@ -93,6 +93,7 @@ ISR(TIMER1_COMPB_vect){
 	                 TIFR1 = (1<<OCF1A);
                       while((TIFR1 & (1<<OCF1A)) == 0);
 	                 TIFR1 = (1<<OCF1A);
+                    
                 }
             
                 if(exposing_cycles == exposing_cycle_count){
@@ -122,6 +123,8 @@ ISR(TIMER1_COMPB_vect){
 
 	}else{
              
+      
+  
 		//LS_SYNC (we have missed the sync pulse)
 		TCCR1A = (1<<COM1A1) ;
 		TCCR1A = (1<<COM1A1) | (1<<FOC1A); //Assure that laser is off
@@ -151,9 +154,17 @@ void fill_data_table(){
 	    data_table[x] = 400-x;
             
         }
+        
        data_table[81] = 0;
        
-  
+       
+       
+       data_table[0] = 5000;
+       data_table[1] = 40;
+       data_table[2] = 0;
+       
+       
+       //data_table[0] = 0;
 }
 
 

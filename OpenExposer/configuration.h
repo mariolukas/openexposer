@@ -9,16 +9,27 @@
         //3 | 6 | 12 | A1
         //4 | 7 | 13 | A2
         
-// MOTOR        
+// STEPPER  
 #define Y_ENABLE   5  
 #define Y_STEP     6  
 #define Y_DIR      7
 
+#define Z_ENABLE   2
+#define Z_STEP     3
+#define Z_DIR      4
+
 #define STEPS_PER_REVOLUTION 200
 #define MICROSTEP   A5 
 
+// Laser Thickness or Line Width
+#define LINE_WIDTH 5
 
-// LASER 
+
+// ENDSTOPS
+#define Y_ENDSTOP  A4
+#define Z_ENDSTOP  A3
+
+// LASER
 
 #define LASER_PIN 9
 #define LASER_PORT        B
@@ -33,7 +44,7 @@
 #define OPTO_PIN 8
 
 
-// MACROS
+// USEFUL MACROS
 
 #define PORT_(port) PORT ## port 
 #define DDR_(port)  DDR  ## port 

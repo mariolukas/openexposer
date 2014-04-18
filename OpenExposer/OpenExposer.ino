@@ -1,46 +1,32 @@
 #include "configuration.h"
 #include "LaserDriver.h"
-#include "AccelStepper.h"
+#include "StepperControl.h"
+#include "ProcessCommand.h"
 
-const uint8_t DATA_SCALE_VALUE = 30;
+const uint8_t DATA_SCALE_VALUE = 28;
 boolean data_received = false;
 
 
 uint16_t i = 100;
 byte command = 0;
 float pos = 0;
-AccelStepper stepper(1, Y_STEP, Y_DIR);
+
   
 
 void setup(){
   
   Serial.begin(57600);
-  //y_axis_motor.setSpeed(40);
 
-    stepper.setMaxSpeed(50.0);
-    stepper.setAcceleration(500.0);
+  initSteppers();
 
-  /*
- 
-  pinMode(MICROSTEP,OUTPUT);
 
-  */
-  pinMode(MICROSTEP,OUTPUT);
-  pinMode(Y_ENABLE, OUTPUT);
- // pinMode(Y_STEP, OUTPUT);
- // pinMode(Y_DIR, OUTPUT);
-  
-
-  digitalWrite(MICROSTEP, HIGH); //no microstepping
-  digitalWrite(Y_ENABLE, LOW);//activate driver
-
-  //y_axis_motor.speed(5);
   noInterrupts();
   laser_init();  
   interrupts();
   
   Serial.print("Exposer Ready\n");
   laser_on();
+
 }
 
 void loop(){
@@ -57,15 +43,13 @@ void loop(){
     data_received = false;
   }
   
-     
+  
 
   
    if (exposing_done){
       
-      stepper.move(20);
-      
-      while(stepper.run());
-      
+      moveToNextLine();
+
       Serial.print(1); 
       write_line_enable = 0;
       exposing_done = 0; 
@@ -73,6 +57,7 @@ void loop(){
       
   
 }
+
 
 int getPackage() {
 	unsigned int data = 0;

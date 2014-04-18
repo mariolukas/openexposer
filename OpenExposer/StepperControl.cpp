@@ -23,11 +23,22 @@ void initSteppers(){
   pinMode(Z_ENABLE, OUTPUT);
   digitalWrite(Z_ENABLE, LOW);
   
+  // ENDSTOP SETTINGS
+  pinMode(Y_ENDSTOP, INPUT);
+  digitalWrite(Y_ENDSTOP, HIGH);  
+  
 }
 
 void moveToNextLine(){
    int steps_to_move = LINE_WIDTH;
    y_stepper.runToNewPosition(y_stepper.targetPosition()-steps_to_move);
+}
+
+boolean endStopSwitchReached(int endstop){
+  if(digitalRead(endstop) == LOW)
+      return true;
+  else 
+     return false; 
 }
 
 
