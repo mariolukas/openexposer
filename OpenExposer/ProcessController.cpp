@@ -30,6 +30,15 @@ void processController(){
         case 0x01:
           startExposing();
         break;
+        
+        case 0x02:
+          home_y_axis();
+        break;
+        
+        case 0x03:
+          home_z_axis();
+        break;
+        
      
     }
     

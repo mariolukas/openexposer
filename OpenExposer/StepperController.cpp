@@ -11,12 +11,14 @@ void initSteppers(){
   digitalWrite(MICROSTEP, HIGH); //no microstepping
  
   
-  y_stepper.setMaxSpeed(84550.0);
-  y_stepper.setAcceleration(92500.0);
+  y_stepper.setMaxSpeed(MAX_Y_SPEED);
+  y_stepper.setAcceleration(MAX_Y_ACCELERATION);
   
-  z_stepper.setMaxSpeed(14550.0);
-  z_stepper.setAcceleration(12500.0);
+  z_stepper.setMaxSpeed(MAX_Z_SPEED);
+  z_stepper.setAcceleration(MAX_Z_ACCELERATION);
   
+
+ 
   pinMode(Y_ENABLE, OUTPUT);
   digitalWrite(Y_ENABLE, LOW);
   
@@ -27,8 +29,15 @@ void initSteppers(){
   pinMode(Y_ENDSTOP, INPUT);
   digitalWrite(Y_ENDSTOP, HIGH);  
   
+  pinMode(Z_ENDSTOP, INPUT);
+  digitalWrite(Z_ENDSTOP, HIGH); 
 
-  
+
+}
+
+void moveToNextLayer(){
+   int steps_to_move = LAYER_HEIGHT;
+   z_stepper.runToNewPosition(z_stepper.targetPosition()-steps_to_move);
 }
 
 void moveToNextLine(){
@@ -36,9 +45,19 @@ void moveToNextLine(){
    y_stepper.runToNewPosition(y_stepper.targetPosition()-steps_to_move);
 }
 
+void home_z_axis(){
+  
+    while(endStopSwitchReached(Z_ENDSTOP)){
+        z_stepper.runToNewPosition(z_stepper.targetPosition()-100);
+    }
+    z_stepper.runToNewPosition(z_stepper.targetPosition()+1000);
+    z_stepper.setCurrentPosition(0.0);
+  
+}
+
 void home_y_axis(){
     while(endStopSwitchReached(Y_ENDSTOP)){
-        y_stepper.runToNewPosition(y_stepper.targetPosition()+1);
+       y_stepper.runToNewPosition(y_stepper.targetPosition()+10);
     }
     y_stepper.runToNewPosition(y_stepper.targetPosition()-100);
     y_stepper.setCurrentPosition(0.0);

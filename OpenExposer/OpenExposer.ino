@@ -5,10 +5,12 @@
 
 void setup(){
   
-  Serial.begin(57600);
+  Serial.begin(BAUDRATE);
 
   initSteppers();
   home_y_axis();
+  home_z_axis();
+  //moveToNextLayer();
   
   noInterrupts();
   laser_init();  
