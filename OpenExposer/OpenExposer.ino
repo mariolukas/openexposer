@@ -8,7 +8,7 @@ void setup(){
   Serial.begin(57600);
 
   initSteppers();
-  //home_y_axis();
+  home_y_axis();
   
   noInterrupts();
   laser_init();  
