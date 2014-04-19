@@ -6,46 +6,58 @@
 boolean data_received = false;
 byte received_command = 0;
 
-
-void startExposing(){
-   write_line_enable = 1;
-}
-
-void postExposingProcess(){
-    if (exposing_done){
-      
-      moveToNextLine();
-
-      Serial.print(0x01); 
-      write_line_enable = 0;
-      exposing_done = 0; 
-   }
+void acknowledge(){
+      Serial.print(1); 
+      received_command = 0; 
+      data_received = false;
 }
 
 void processController(){
 
-   if(data_received){
+  if(data_received){
      
      switch(received_command){
         case 0x01:
-          startExposing();
+             if (exposing_done){
+                moveToNextLine();
+                acknowledge();
+                write_line_enable = 0;
+                exposing_done = 0;
+             } else {
+                write_line_enable = 1;
+             }
         break;
         
+        // home y axis
         case 0x02:
+          laser_off();
           home_y_axis();
+          acknowledge();
+          laser_on();
         break;
         
+        // home z axis
         case 0x03:
+          laser_off();
           home_z_axis();
+          acknowledge();
+          laser_on();
         break;
         
-     
+        // turn laser on
+        case 0x04: 
+          laser_on();
+          acknowledge();
+        break;
+        
+        // turn laser off
+        case 0x05:
+         laser_off();
+         acknowledge();
+        break;
     }
-    
-    data_received = false;
+
   }
-  
-  postExposingProcess();
   
 }
 
@@ -76,7 +88,6 @@ void serialEvent(){
 
    if( Serial.available() > 0 ) {
        received_command = Serial.read();
-      
        len = getPackage();
        while(i<len){
          value = getPackage();

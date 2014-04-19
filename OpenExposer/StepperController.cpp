@@ -36,12 +36,12 @@ void initSteppers(){
 }
 
 void moveToNextLayer(){
-   int steps_to_move = LAYER_HEIGHT;
+   int steps_to_move = LAYER_HEIGHT*Z_STEPS_PER_MM;
    z_stepper.runToNewPosition(z_stepper.targetPosition()-steps_to_move);
 }
 
 void moveToNextLine(){
-   int steps_to_move = LINE_WIDTH;
+   int steps_to_move = LINE_WIDTH*Y_STEPS_PER_MM;
    y_stepper.runToNewPosition(y_stepper.targetPosition()-steps_to_move);
 }
 

@@ -26,14 +26,16 @@
 #define MAX_Y_ACCELERATION  92500.0
 #define MAX_Y_SPEED 84550.0
 
+#define Y_STEPS_PER_MM 100
+#define Z_STEPS_PER_MM 5000
 
 
 #define STEPS_PER_REVOLUTION 200
 #define MICROSTEP   A5 
 
 // Laser Thickness or Line Width
-#define LINE_WIDTH 5
-#define LAYER_HEIGHT 4000
+#define LINE_WIDTH 0.1
+#define LAYER_HEIGHT 0.1
 
 
 // ENDSTOPS

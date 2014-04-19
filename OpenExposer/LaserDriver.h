@@ -16,6 +16,7 @@ void laser_init();
 void laser_on();
 void laser_off();
 void laser_write_line();
+void exposeLine();
 
 #endif
 
