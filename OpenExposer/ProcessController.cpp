@@ -12,20 +12,14 @@ void acknowledge(){
       data_received = false;
 }
 
+
 void processController(){
 
   if(data_received){
      
      switch(received_command){
         case 0x01:
-             if (exposing_done){
-                moveToNextLine();
-                acknowledge();
-                write_line_enable = 0;
-                exposing_done = 0;
-             } else {
-                write_line_enable = 1;
-             }
+             write_line_enable = 1;
         break;
         
         // home y axis
@@ -55,8 +49,23 @@ void processController(){
          laser_off();
          acknowledge();
         break;
+        
+        // next layer
+        case 0x06:
+          // moveToNextLayer here!
+          toggle_y_Direction();
+          acknowledge();
+        break;
     }
 
+  }
+ 
+  if (exposing_done){
+                moveToNextLine();
+               
+                acknowledge();
+                write_line_enable = 0;
+                exposing_done = 0;
   }
   
 }
@@ -95,7 +104,6 @@ void serialEvent(){
          i++;
        }
     } 
-  
  
     len = 0;
     i = 0;

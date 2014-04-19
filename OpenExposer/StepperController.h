@@ -8,13 +8,17 @@
 #endif
 
 
+
 void initSteppers();
 
 void moveToNextLine();
-void  moveToNextLayer();
+void moveToNextLayer();
+
+void toggle_y_Direction();
 
 void home_y_axis();
 void home_z_axis();
+
 
 boolean endStopSwitchReached(int endstop);
 

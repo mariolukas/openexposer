@@ -5,6 +5,10 @@
 AccelStepper y_stepper(1, Y_STEP, Y_DIR);
 AccelStepper z_stepper(2, Z_STEP, Z_DIR);
 
+
+int y_step_direction = 1;
+int z_step_direction = 1;
+
 void initSteppers(){
   
   pinMode(MICROSTEP,OUTPUT); 
@@ -35,13 +39,17 @@ void initSteppers(){
 
 }
 
+void toggle_y_Direction(){
+    y_step_direction *= -1;
+}
+
 void moveToNextLayer(){
-   int steps_to_move = LAYER_HEIGHT*Z_STEPS_PER_MM;
+   int steps_to_move = LAYER_HEIGHT*Z_STEPS_PER_MM * z_step_direction;
    z_stepper.runToNewPosition(z_stepper.targetPosition()-steps_to_move);
 }
 
 void moveToNextLine(){
-   int steps_to_move = LINE_WIDTH*Y_STEPS_PER_MM;
+   int steps_to_move = LINE_WIDTH*Y_STEPS_PER_MM * y_step_direction;
    y_stepper.runToNewPosition(y_stepper.targetPosition()-steps_to_move);
 }
 

@@ -3,7 +3,7 @@
 //OC1A
 
 
-#define BAUDRATE 57600
+#define BAUDRATE 115200
 
 // Y Stepper Settings
 //driver: 1 | 2 | 3  | 4
@@ -26,7 +26,7 @@
 #define MAX_Y_ACCELERATION  92500.0
 #define MAX_Y_SPEED 84550.0
 
-#define Y_STEPS_PER_MM 100
+#define Y_STEPS_PER_MM 10
 #define Z_STEPS_PER_MM 5000
 
 
@@ -34,8 +34,8 @@
 #define MICROSTEP   A5 
 
 // Laser Thickness or Line Width
-#define LINE_WIDTH 0.1
-#define LAYER_HEIGHT 0.1
+#define LINE_WIDTH 1
+#define LAYER_HEIGHT 1
 
 
 // ENDSTOPS
@@ -44,14 +44,14 @@
 
 // LASER
 
-#define LASER_PIN 9
+#define LASER_PIN         9
 #define LASER_PORT        B
 #define LASER_BIT         1
 #define LASER_PWM_PORT    D
 #define LASER_PWM_BIT     6
 #define LASER_PWM_PIN     6
 
-#define LASER_EXPOSING_CYCLES 10
+#define LASER_EXPOSING_CYCLES 40
 #define LASER_POINT_SCALER 28
 
 // OPTO
