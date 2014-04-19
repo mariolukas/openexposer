@@ -36,8 +36,10 @@
 #define LASER_BIT         1
 #define LASER_PWM_PORT    D
 #define LASER_PWM_BIT     6
-#define LASER_PWM_PIN 6
+#define LASER_PWM_PIN     6
 
+#define LASER_EXPOSING_CYCLES 10
+#define LASER_POINT_SCALER 28
 
 // OPTO
 

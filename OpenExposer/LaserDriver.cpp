@@ -15,7 +15,7 @@ static uint8_t laser_state;
 volatile uint8_t write_line_enable = 1;
 static uint16_t last_line_start;
 
-int exposing_cycle_count = 20;
+int exposing_cycle_count = LASER_EXPOSING_CYCLES;
 int exposing_cycles = 0;
 uint8_t exposing_done = 0;
 
