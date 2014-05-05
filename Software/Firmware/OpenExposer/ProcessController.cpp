@@ -62,6 +62,11 @@ void processController(){
           moveToNextLayer();
           acknowledge();
         break;
+        
+        case 0x08:
+          move_to_end_position();
+          acknowledge();
+        break;
     }
 
   }
