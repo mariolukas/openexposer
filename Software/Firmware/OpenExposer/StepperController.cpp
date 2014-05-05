@@ -46,8 +46,10 @@ void toggle_y_Direction(){
 void moveToNextLayer(){
    int steps_to_move = LAYER_HEIGHT * z_step_direction;
    int steps_flow_control = 16000;
+   motor_enable(Z_ENABLE);
    z_stepper.runToNewPosition(z_stepper.targetPosition()+steps_flow_control);
    z_stepper.runToNewPosition(z_stepper.targetPosition()-steps_flow_control+steps_to_move);
+   motor_disable(Z_ENABLE);
 }
 
 void moveToNextLine(){
@@ -62,8 +64,19 @@ void home_z_axis(){
     }
     z_stepper.runToNewPosition(z_stepper.targetPosition()+1000);
     z_stepper.setCurrentPosition(0.0);
+    motor_disable(Z_ENABLE);
   
 }
+
+void motor_enable(int motor){
+   digitalWrite(motor, LOW);
+}
+
+void motor_disable(int motor){
+   digitalWrite(motor, HIGH);
+}
+
+
 
 void home_y_axis(){
     while(endStopSwitchReached(Y_ENDSTOP)){
@@ -74,7 +87,7 @@ void home_y_axis(){
    
 }
 
-void move_to_end_position(){
+void move_z_to_end_position(){
    z_stepper.runToNewPosition(z_stepper.targetPosition()+END_POSITION_OFFSET);
 }
 

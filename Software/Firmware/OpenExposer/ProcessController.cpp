@@ -64,7 +64,7 @@ void processController(){
         break;
         
         case 0x08:
-          move_to_end_position();
+          move_z_to_end_position();
           acknowledge();
         break;
     }
