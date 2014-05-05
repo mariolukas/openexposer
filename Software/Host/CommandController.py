@@ -69,6 +69,15 @@ class CommandController():
         state = self.serial_connection.read(1)
         self.checkSerialResponse(state)
 
+    def move_z_to_end_position(self):
+        data = []
+
+        self.sendData('\x08',data)
+
+        state = self.serial_connection.read(1)
+        self.checkSerialResponse(state)
+
+
     def checkSerialResponse(self,state):
 
         if (state):
@@ -98,13 +107,12 @@ class CommandController():
         print "Connection closed"
 
 
-    def loadSVGFile(self, filename):
+    def loadFile(self, filename):
         self.slicer =  PolygonSlicer("resources/"+filename)
 
     def exposeLayer(self, layer):
         first_line = 0
         last_line = 0
-        print layer%2==0
 
         if(layer%2==0):
             first_line = 1

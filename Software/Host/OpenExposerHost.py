@@ -34,7 +34,7 @@ class OpenExposerHost(cmd.Cmd):
         self.prompt = line + ': '
 
     def do_loadfile(self, arg):
-        self.command_controller.loadSVGFile(self.parse(arg)[0])
+        self.command_controller.loadFile(self.parse(arg)[0])
 
     def do_exposelayer(self,arg):
         self.command_controller.exposeLayer(self.parse(arg)[0])
@@ -42,12 +42,14 @@ class OpenExposerHost(cmd.Cmd):
     def do_movetonextlayer(self,line):
         self.command_controller.move_z_to_next_layer()
 
+
     def do_test(self,line):
         port = '/dev/tty.usbserial-AH00ZJP0'
         speed = 115200
         self.command_controller.connect(port, speed)
         self.command_controller.home_y_axis()
-        self.command_controller.loadSVGFile("smallocto.svg")
+        self.command_controller.home_z_axis()
+        self.command_controller.loadFile("cube.svg")
         self.command_controller.expose()
         #self.command_controller.exposeLayer(50)
         #self.command_controller.home_y_axis()

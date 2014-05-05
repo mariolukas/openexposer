@@ -7,10 +7,10 @@ class PolygonSlicer():
     svg_doc = ""
     width = 0
     height = 0
-    y_precision = 10
+    y_precision = 40
     x_precision = 10
-    print_bed_width = 100
-    print_bed_height = 100
+    print_bed_width = 150
+    print_bed_height = 150
 
 
     def __init__(self, svg_file):
@@ -131,8 +131,15 @@ class PolygonSlicer():
         distances = self.remove_distance_value(distances,0)
 
         # remove last distance is not needed
-        if len(distances) > 0:
+        distance_values  = len(distances)
+
+        if (distance_values > 0):
             distances.pop()
+
+        # we have to few distance points, it causes error lines
+        if ((distance_values <= 2)):
+            distances = []
+
 
         return distances
 
