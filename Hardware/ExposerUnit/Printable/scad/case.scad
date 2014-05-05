@@ -1,7 +1,7 @@
 include <config.scad>;
 
 translate([0,0,30]) rotate([0,180,0]) top_case();
-rotate([0,180,0])  bottom_case();
+//rotate([0,180,0])  bottom_case();
 
 module base_form(width,length,height){
     

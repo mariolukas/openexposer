@@ -1,6 +1,8 @@
 include <config.scad>;
 
-module mirror_mount_for_sensor(){
+mirror_mount();
+
+module mirror_mount_sensor(){
 
 
    difference(){ 
