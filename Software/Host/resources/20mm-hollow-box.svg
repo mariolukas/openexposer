@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:slic3r="http://slic3r.org/namespaces/slic3r">
+  <!-- 
+  Generated using Slic3r 1.0.0RC2
+  http://slic3r.org/
+   -->
+  <g id="layer0" slic3r:z="0.175">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+  <g id="layer1" slic3r:z="0.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+  <g id="layer2" slic3r:z="0.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+  <g id="layer3" slic3r:z="0.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+  <g id="layer4" slic3r:z="1.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer5" slic3r:z="1.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer6" slic3r:z="1.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer7" slic3r:z="1.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer8" slic3r:z="2.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer9" slic3r:z="2.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer10" slic3r:z="2.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer11" slic3r:z="2.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer12" slic3r:z="3.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer13" slic3r:z="3.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer14" slic3r:z="3.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer15" slic3r:z="3.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer16" slic3r:z="4.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer17" slic3r:z="4.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer18" slic3r:z="4.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer19" slic3r:z="4.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer20" slic3r:z="5.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer21" slic3r:z="5.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer22" slic3r:z="5.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer23" slic3r:z="5.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer24" slic3r:z="6.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer25" slic3r:z="6.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer26" slic3r:z="6.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer27" slic3r:z="6.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer28" slic3r:z="7.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer29" slic3r:z="7.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer30" slic3r:z="7.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer31" slic3r:z="7.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer32" slic3r:z="8.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer33" slic3r:z="8.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer34" slic3r:z="8.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer35" slic3r:z="8.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer36" slic3r:z="9.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer37" slic3r:z="9.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer38" slic3r:z="9.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer39" slic3r:z="9.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer40" slic3r:z="10.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer41" slic3r:z="10.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer42" slic3r:z="10.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer43" slic3r:z="10.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+    <polygon slic3r:type="hole" points="1,1 1,19 19,19 19,1" style="fill: black" />
+  </g>
+  <g id="layer44" slic3r:z="11.225">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+  <g id="layer45" slic3r:z="11.475">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+  <g id="layer46" slic3r:z="11.725">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+  <g id="layer47" slic3r:z="11.975">
+    <polygon slic3r:type="contour" points="20,0 20,20 0,20 0,0" style="fill: white" />
+  </g>
+</svg>
