@@ -7,6 +7,7 @@
 
 // Y Stepper Settings
 //driver: 1 | 2 | 3  | 4
+
         //2 | 5 | 11 | A0
         //3 | 6 | 12 | A1
         //4 | 7 | 13 | A2
@@ -32,6 +33,8 @@
 #define Y_RESOLUTION 40
 #define Z_RESOLUTION 10
 
+
+#define END_POSITION_OFFSET Z_STEPS_PER_MM*30
 
 #define LAYER_HEIGHT Z_STEPS_PER_MM/Z_RESOLUTION
 #define LINE_WIDTH   Y_STEPS_PER_MM/Y_RESOLUTION

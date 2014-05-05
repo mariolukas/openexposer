@@ -10,8 +10,7 @@ e.g.
 
 and more...
 
-3D printed Open Exposer Unit: 
-<img src="http://www.mariolukas.de/wp-content/uploads/2014/05/IMG_1139.jpg" width="500">
 
-As 3D Printer: 
-<img src="http://www.mariolukas.de/wp-content/uploads/2014/05/IMG_1199.jpg" width="500">
+<img src="http://www.mariolukas.de/wp-content/uploads/2014/05/IMG_1139.jpg" width="400">
+
+<img src="http://www.mariolukas.de/wp-content/uploads/2014/05/IMG_1199.jpg" width="400">
