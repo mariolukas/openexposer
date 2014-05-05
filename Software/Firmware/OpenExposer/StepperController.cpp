@@ -74,6 +74,10 @@ void home_y_axis(){
    
 }
 
+void move_to_end_position(){
+   z_stepper.runToNewPosition(z_stepper.targetPosition()+END_POSITION_OFFSET);
+}
+
 boolean endStopSwitchReached(int endstop){
   if(digitalRead(endstop) == LOW){
       return true;
