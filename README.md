@@ -4,10 +4,10 @@ Open Exposer
 OpenExposer is a low cost and easy to use/build laser exposing unit suitable for many different applications. 
 
 Possible use cases: 
-> stereolithography printer 
-> uv pcb exposer 
-> laser harp 
-> show laser 
+- stereolithography printer 
+- uv pcb exposer 
+- laser harp 
+- show laser 
 
 Main features: 
 - unit for multiple laser exposing processes 
