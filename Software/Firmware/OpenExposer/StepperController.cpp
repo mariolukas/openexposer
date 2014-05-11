@@ -15,13 +15,13 @@ void initSteppers(){
   digitalWrite(MICROSTEP, HIGH); //no microstepping
  
   
-  y_stepper.setMaxSpeed(MAX_Y_SPEED);
-  y_stepper.setAcceleration(MAX_Y_ACCELERATION);
+  y_stepper.setMaxSpeed((long) MAX_Y_SPEED);
+  y_stepper.setAcceleration((long) MAX_Y_ACCELERATION);
   
-  z_stepper.setMaxSpeed(MAX_Z_SPEED);
-  z_stepper.setAcceleration(MAX_Z_ACCELERATION);
-  
-
+  z_stepper.setMaxSpeed((long) MAX_Z_SPEED);
+  z_stepper.setAcceleration((long) MAX_Z_ACCELERATION);
+ 
+  z_stepper.setSpeed((long) 100000); 
  
   pinMode(Y_ENABLE, OUTPUT);
   digitalWrite(Y_ENABLE, LOW);
@@ -44,11 +44,20 @@ void toggle_y_Direction(){
 }
 
 void moveToNextLayer(){
-   int steps_to_move = LAYER_HEIGHT * z_step_direction;
-   int steps_flow_control = 16000;
+   long steps_to_move = (long) LAYER_HEIGHT * z_step_direction;
+   long steps_flow_control = (long) FLOW_CONTROL_DISTANCE;
+   
+   
    motor_enable(Z_ENABLE);
-   z_stepper.runToNewPosition(z_stepper.targetPosition()+steps_flow_control);
-   z_stepper.runToNewPosition(z_stepper.targetPosition()-steps_flow_control+steps_to_move);
+   
+   z_stepper.move(steps_flow_control);
+   z_stepper.runToPosition();
+   //z_stepper.runToNewPosition(z_stepper.targetPosition()+steps_flow_control);
+   delay(100);
+   z_stepper.move(-steps_flow_control+steps_to_move);
+   z_stepper.runToPosition();
+   //z_stepper.runToNewPosition(z_stepper.targetPosition()-steps_flow_control+steps_to_move);
+
    motor_disable(Z_ENABLE);
 }
 
@@ -58,6 +67,8 @@ void moveToNextLine(){
 }
 
 void home_z_axis(){
+  
+   
   
     while(endStopSwitchReached(Z_ENDSTOP)){
         z_stepper.runToNewPosition(z_stepper.targetPosition()-100);
@@ -76,6 +87,15 @@ void motor_disable(int motor){
    digitalWrite(motor, HIGH);
 }
 
+void move_z_relative(){
+     
+     long steps_to_move = (long) Z_STEPS_PER_MM * 10;
+     motor_enable(Z_ENABLE);
+     z_stepper.move(steps_to_move);
+     z_stepper.runToPosition();
+  
+     motor_disable(Z_ENABLE);
+}
 
 
 void home_y_axis(){
@@ -88,7 +108,13 @@ void home_y_axis(){
 }
 
 void move_z_to_end_position(){
-   z_stepper.runToNewPosition(z_stepper.targetPosition()+END_POSITION_OFFSET);
+     long steps_to_move = (long) END_POSITION_OFFSET;
+     motor_enable(Z_ENABLE);
+     z_stepper.move(steps_to_move);
+     z_stepper.runToPosition();
+  
+     motor_disable(Z_ENABLE);
+    // z_stepper.runToNewPosition(z_stepper.targetPosition()+END_POSITION_OFFSET);
 }
 
 boolean endStopSwitchReached(int endstop){

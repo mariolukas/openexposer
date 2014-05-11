@@ -6,6 +6,7 @@
 boolean data_received = false;
 byte received_command = 0;
 
+
 void acknowledge(){
       Serial.print(1); 
       received_command = 0; 
@@ -67,6 +68,16 @@ void processController(){
           move_z_to_end_position();
           acknowledge();
         break;
+        
+        case 0x09:
+          set_exposing_cycles();
+          acknowledge();
+        break;
+        
+        case 0x0a:
+         move_z_relative();
+         acknowledge();
+        break;
     }
 
   }
@@ -99,6 +110,7 @@ int getPackage() {
 
 	return data;
 }
+
 
 
 

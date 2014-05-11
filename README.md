@@ -1,15 +1,23 @@
 Open Exposer
 ===========
 
-Open Exposer is a general purpose laser exposing unit. It can be used for any kind of project where laser exposing is needed. It will be a low coast and easy to build solution. Open Exposer will work with most of the polygon mirror units which can be found in old laser printers.
+OpenExposer is a low cost and easy to use/build laser exposing unit suitable for many different applications. 
 
-e.g.
-- stereolithography 3D printers
-- PCB exposing machines
-- laser harps
+Possible use cases: 
+> stereolithography printer 
+> uv pcb exposer 
+> laser harp 
+> show laser 
 
-and more...
-
+Main features: 
+- unit for multiple laser exposing processes 
+- Arduino compatible 
+- low cost (standard laser printer) parts 
+- case parts lasercut or 3d printable 
+- up to 2 stepper motors can be connected 
+- additional I/O ports for custom extensions 
+- simple protocol 
+- extendable host software 
 
 <img src="http://www.mariolukas.de/wp-content/uploads/2014/05/IMG_1139.jpg" width="400">
 

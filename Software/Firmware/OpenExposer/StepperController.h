@@ -23,6 +23,8 @@ void toggle_y_Direction();
 void home_y_axis();
 void home_z_axis();
 
+void move_z_relative();
+
 
 boolean endStopSwitchReached(int endstop);
 

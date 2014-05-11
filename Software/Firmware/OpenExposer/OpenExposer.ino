@@ -3,12 +3,16 @@
 #include "StepperController.h"
 #include "ProcessController.h"
 
+int pressure = 0;
+
 void setup(){
   
+   
   Serial.begin(BAUDRATE);
-
+   
   initSteppers();
 
+  
   noInterrupts();
   laser_init();  
   interrupts();
@@ -19,8 +23,10 @@ void setup(){
 }
 
 void loop(){
- 
+    pressure = analogRead(VAT_PRESSURE_SENSOR);
+    Serial.println(pressure);
     processController(); 
+    delay(1000);
 }
 
 

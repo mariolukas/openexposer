@@ -9,7 +9,6 @@
 extern uint16_t offset;
 extern uint16_t data_table[512];
 extern volatile uint8_t write_line_enable;
-extern uint16_t max_expose_cycles;
 extern uint8_t exposing_done;
 
 void laser_init();
@@ -17,6 +16,7 @@ void laser_on();
 void laser_off();
 void laser_write_line();
 void exposeLine();
+void set_exposing_cycles();
 
 #endif
 

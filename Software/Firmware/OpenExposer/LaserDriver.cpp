@@ -168,6 +168,11 @@ void fill_data_table(){
 }
 
 
+void set_exposing_cycles(){
+      
+}
+
+
 
 // initialize laser 
 void laser_init(){
