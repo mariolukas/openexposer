@@ -2,8 +2,8 @@
 
 OpenExposer is a low cost open source stereolithography printer.
 
-<img style='height: 390px' src="images/DSC09916.JPG"></img>
-<img style='width: 300px' src="images/3d_view.png"></img>
+<img style="height: 250px" height="250" src="images/image_small.JPG"></img>
+<img style="width: 200px" width="200" src="images/3d_view.png"></img>
 
 ## Hardware
 
