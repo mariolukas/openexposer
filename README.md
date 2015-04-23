@@ -50,4 +50,11 @@ Open Exposer Arduino Firmware.
 
 * uv PCB exposing
 
+##I'll keep you informed
+<a href="http://twitter.com/l_k3">Twitter</a>
+<a href="https://www.youtube.com/user/clustermaster23">Youtube</a>
+<a href="https://www.facebook.com/pages/Mario-Lukas/714788148580621">Facebook</a>
+<a href="http://www.mariolukas.de/?s=openexposer">Blog</a>
+<a href="https://hackaday.io/project/1129-openexposer">hackday.io (Hackaday Prize Project 2014)</a>
+
 
