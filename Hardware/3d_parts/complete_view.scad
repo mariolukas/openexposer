@@ -3,26 +3,110 @@ include <NEMAMount.scad>;
 include <servo.scad>;
 include <hardware.scad>;
 
-//rotate([90,0,90]) bottom_back_connector();
-//rotate([90,0,90]) bottom_front_connector();
-//rotate([0,180,0]) top_motor_mount();
-//rotate([90,270,0]) mirror([0,1,0]) rod_corner_mount();
-//rotate([0,180,0]) vat_mount();
-//rotate([0,180,0]) bottom_motor_mount();
-//stage_carrier();
-//rotate([90,0,0]) vat_mount_carrier();
-//rotate([90,0,0]) front_rod_vat_mount();
-//complete_3d();
-//rotate([0,90,0]) back_motor_mount();
-//rotate([0,270,0]) back_motor_nut_mount();
-//vat_mount();
-//translate([-115,-38,45]) rotate([0,180,-90])  vat_clamp();
-//translate([-188.5,34,40]) rotate([180,0,139])  vat_clamp();
-//complete_3d();
-//translate([-95,36.5,43]) rotate([-90,-90,0]) servoSG90();
-translate([-111,65,50]) rotate([0,0,0]) servo_arm();
-//translate([-210,55,30]) rotate([-90,0,0]) vat_mount_carrier(true);
-//vat_mount();
+draw_vat = false;
+draw_exposer = false;
+draw_frame_top = false;
+draw_frame_bottom = true;
+draw_mechanic_z = false;
+draw_mechanic_y = false;
+
+draw_assembled = false;
+
+if(draw_assembled) 
+    assembled_parts();
+else
+    individual_parts();
+
+
+module assembled_parts() {
+    if(draw_frame_bottom) {
+        translate([65,70,0]) mirror([90,0,0]) rod_corner_mount();
+        translate([65,-70,0]) rotate([0,0,180]) rod_corner_mount();
+
+        translate([-245,70,0]) rod_corner_mount();
+        translate([-245,-70,0]) rotate([0,0,180]) mirror([90,0,0]) rod_corner_mount();
+        
+        rods_frame_bottom();
+    }
+    if(draw_frame_top) {
+        translate([-65,78,210]) top_connector();
+        translate([-65,-78,210]) top_connector();
+
+        translate([37,-78,20]) rotate([0,-25,0]) bottom_back_connector();
+        translate([37,78,20])  rotate([0,-25,0]) bottom_back_connector();
+
+        translate([-80,78,20]) 	bottom_front_connector();
+        translate([-80,-78,20]) bottom_front_connector();
+        
+        rods_frame_top();
+    }
+    if(draw_vat) {
+        translate([-205,78,20])  front_rod_vat_mount();
+        translate([-205,-78,20])  front_rod_vat_mount();
+        translate([-2,0,20]) vat_mount();
+
+        translate([-210,-58,30]) vat_mount_carrier();
+        translate([-210,55,30]) vat_mount_carrier(true);
+        
+        rods_vat();
+    }
+    if(draw_mechanic_z) {
+        translate([-68,0,216]) top_motor_mount();
+        translate([-104,0,114]) stage_carrier();
+        translate([-112,0,24]) rotate([0,180,0]) bottom_motor_mount();
+        
+        rods_mechanic_z();
+    }
+    if(draw_mechanic_y) {
+        translate([58,5,0]) back_motor_mount();
+        translate([-55,0,-25.5]) back_motor_nut_mount();
+        rods_mechanic_y();
+    }
+    if(draw_exposer) {
+        translate([-45,0,-7]) box();
+    }
+}
+
+module individual_parts() {
+    if(draw_frame_bottom) {
+        translate([65,50,0]) mirror([90,0,0]) rotate([0,-90,0]) rod_corner_mount();
+        translate([65,-50,0]) rotate([0,0,180]) rotate([0,-90,0]) rod_corner_mount();
+
+        translate([105,60,0]) rotate([0,-90,270]) rod_corner_mount();
+        translate([105,-60,0]) mirror([90,0,0]) rotate([0,0,90]) rotate([0,-90,0]) rod_corner_mount();
+    }
+    if(draw_frame_top) {
+        translate([-65,78,7]) rotate([90,0,0]) top_connector();
+        translate([-65,-78,7]) mirror([0,90,0]) rotate([90,0,0]) top_connector();
+
+        translate([-20,-28,7]) rotate([90,0,0]) bottom_back_connector();
+        translate([-20,28,7]) mirror([0,90,0]) rotate([90,0,0]) bottom_back_connector();
+
+        translate([-80,43,7]) rotate([90,0,0]) bottom_front_connector();
+        translate([-80,-43,7]) mirror([0,90,0]) rotate([90,0,0]) bottom_front_connector();
+    }
+    if(draw_vat) {
+        translate([-265,48,7.5]) rotate([90,0,0]) front_rod_vat_mount();
+        translate([-265,-48,7.5]) mirror([0,90,0]) rotate([90,0,0]) front_rod_vat_mount();
+        translate([-55,0,-26]) vat_mount();
+
+        translate([-270,78,4.5]) rotate([90,0,0])  vat_mount_carrier();
+        translate([-270,-78,4.5]) rotate([-90,0,0]) vat_mount_carrier(true);
+    }
+    if(draw_mechanic_z) {
+        translate([-212,130,4]) rotate([180,0,0]) top_motor_mount();
+        translate([-212,200,12]) stage_carrier();
+        translate([-172,130,22]) bottom_motor_mount();
+    }
+    if(draw_mechanic_y) {
+        translate([-130,120,11.75]) rotate([0,90,0]) back_motor_mount();
+        translate([-155,210,1.5]) rotate([180,0,0]) back_motor_nut_mount();
+    }
+    if(draw_exposer) {
+        translate([-40,170,0.5]) rotate([180,0,0]) top_case();
+        translate([100,170,16]) rotate([180,0,0]) bottom_case();
+    }
+}
 
 module servo_arm(){
 //translate([-6.2,-3,-1.5]) rotate([0,0,60]) cube([5,2.85,3]);
@@ -66,47 +150,6 @@ module vat_clamp(){
 	translate([-52,0,-8]) cylinder(15,96/2,96/2,true,$fn=100);
 	translate([1,0,-5]) cylinder(20,1.7,1.7,true);
 	}
-}
-
-module complete_3d(){
-//translate([70,-75,-20]) rod_corner_mount();
-translate([65,70,0]) mirror([90,0,0]) rod_corner_mount();
-translate([65,-70,0]) rotate([0,0,180]) rod_corner_mount();
-
-translate([-245,70,0]) rod_corner_mount();
-translate([-245,-70,0]) rotate([0,0,180]) mirror([90,0,0]) rod_corner_mount();
-
-
-translate([-205,78,20])  front_rod_vat_mount();
-translate([-205,-78,20])  front_rod_vat_mount();
-
-translate([-65,78,210]) top_connector();
-translate([-65,-78,210]) top_connector();
-
-translate([37,-78,20]) rotate([0,-25,0]) bottom_back_connector();
-translate([37,78,20])  rotate([0,-25,0]) bottom_back_connector();
-
-
-translate([-80,78,20]) 	bottom_front_connector();
-translate([-80,-78,20]) bottom_front_connector();
-
-translate([-68,0,216]) top_motor_mount();
-translate([-112,0,24]) rotate([0,180,0]) bottom_motor_mount();
-
-translate([-104,0,114]) stage_carrier();
-
-translate([-2,0,20]) vat_mount();
-
-translate([-210,-58,30]) vat_mount_carrier();
-translate([-210,55,30]) vat_mount_carrier(true);
-
-translate([58,5,0]) back_motor_mount();
-
-rods_and_motor();
-translate([-45,0,-7]) box();
-
-
-translate([-55,0,-25.5]) back_motor_nut_mount();
 }
 
 module back_motor_nut_mount(){
@@ -255,41 +298,10 @@ difference(){
 }
 }
 
-module rods_and_motor(){
-	#translate([-125,22,265]) rotate([0,180,180]) nema17(); 
-	
-	//back
-	#translate([120,42,-8]) rotate([0,90,180]) nema17(); 
-	// bearings
-	#translate([-90,-15,100]) rotate([0,0,0]) bearingLM8UU(); 
-	#translate([-90, 15,100]) rotate([0,0,0]) bearingLM8UU(); 	
-
+module rods_frame_bottom(){
 	// bearing rods
 	#translate([-90,46,-30]) rotate([0,90,0]) cylinder(300,4,4,true);
 	#translate([-90,-46,-30]) rotate([0,90,0]) cylinder(300,4,4,true);
-
-	#translate([-90,78,20]) rotate([0,90,0]) cylinder(300,4,4,true);
-	#translate([-90,-78,20]) rotate([0,90,0]) cylinder(300,4,4,true);
-	
-	// z threaded rod
-	#translate([-80,-78,120]) rotate([0,0,0]) cylinder(200,4,4,true);
-	#translate([-80,78,120]) rotate([0,0,0]) cylinder(200,4,4,true);
-
-	// z rod
-	#translate([-90,-15,120]) rotate([0,0,0]) cylinder(160,4,4,true);
-	#translate([-90,15,120]) rotate([0,0,0]) cylinder(160,4,4,true);
-
-     // Motor rod
-	#translate([-104,1,120]) rotate([0,0,0]) cylinder(160,2,2,true);
-
-	// trinangle rod
-	#translate([-12,-78,125]) rotate([0,-25,0]) cylinder(230,4,4,true);
-	#translate([-12,78,125]) rotate([0,-25,0]) cylinder(230,4,4,true);
-	
-	//translate([-45,0,210]) rotate([0,90,90]) cylinder(180,4,4,true);
-	#translate([-90,0,210]) rotate([0,90,90]) cylinder(180,4,4,true);
-	#translate([-90,0,30]) rotate([0,90,90]) cylinder(180,4,4,true);
-	#translate([-210,0,30]) rotate([0,90,90]) cylinder(180,4,4,true);
 
 	// front rod
 	#translate([-237,0,0]) rotate([0,90,90]) cylinder(180,4,4,true);
@@ -299,14 +311,52 @@ module rods_and_motor(){
 	#translate([-90,78,-15]) rotate([0,90,0]) cylinder(320,4,4,true);
 	#translate([-90,-78,-15]) rotate([0,90,0]) cylinder(320,4,4,true);
 
-	#translate([-90,21,-29]) rotate([0,90,0]) cylinder(320,2.5,2.5,true);
+}
+
+module rods_frame_top(){
+	#translate([-90,78,20]) rotate([0,90,0]) cylinder(300,4,4,true);
+    #translate([-90,-78,20]) rotate([0,90,0]) cylinder(300,4,4,true);
+	
+	// z threaded rod
+	#translate([-80,-78,120]) rotate([0,0,0]) cylinder(200,4,4,true);
+	#translate([-80,78,120]) rotate([0,0,0]) cylinder(200,4,4,true);
+
+	// triangle rod
+	#translate([-12,-78,125]) rotate([0,-25,0]) cylinder(230,4,4,true);
+	#translate([-12,78,125]) rotate([0,-25,0]) cylinder(230,4,4,true);
+	
+	#translate([-90,0,210]) rotate([0,90,90]) cylinder(180,4,4,true);
+	#translate([-90,0,30]) rotate([0,90,90]) cylinder(180,4,4,true);
+}
+
+module rods_vat(){
+	#translate([-210,0,30]) rotate([0,90,90]) cylinder(180,4,4,true);
+
 	// petri mount
 	difference(){
 	   %translate([-150,0,55]) cylinder(15,95/2,95/2,true);
-   	  // translate([-150,0,42]) cylinder(15,92/2,92/2,true);
      }
-	//%translate([-150,0,70]) cylinder(150,8/2,8/2,true);
-	//translate([-70,-46,-23]) cube([10,10,10],true);
+}
+
+module rods_mechanic_z(){
+    #translate([-125,22,265]) rotate([0,180,180]) nema17(); 
+	// z rod
+	#translate([-90,-15,120]) rotate([0,0,0]) cylinder(160,4,4,true);
+	#translate([-90,15,120]) rotate([0,0,0]) cylinder(160,4,4,true);
+
+	// bearings
+	#translate([-90,-15,100]) rotate([0,0,0]) bearingLM8UU(); 
+	#translate([-90, 15,100]) rotate([0,0,0]) bearingLM8UU(); 	
+
+     // Motor rod
+	#translate([-104,1,120]) rotate([0,0,0]) cylinder(160,2,2,true);
+}
+
+module rods_mechanic_y(){
+	//back
+	#translate([120,42,-8]) rotate([0,90,180]) nema17(); 
+
+	#translate([-90,21,-29]) rotate([0,90,0]) cylinder(320,2.5,2.5,true);
 }
 
 module top_connector(){
