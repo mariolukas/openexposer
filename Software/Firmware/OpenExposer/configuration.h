@@ -1,52 +1,34 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
-//OC1A
-
-
-#define BAUDRATE 115200
-
-// Y Stepper Settings
-//driver: 1 | 2 | 3  | 4
-
-        //2 | 5 | 11 | A0
-        //3 | 6 | 12 | A1
-        //4 | 7 | 13 | A2
+        
+// GENERAL
+#define VERSION              (0.3)  // firmware version
+#define BAUD                 (9600)  // How fast is the Arduino talking?
+#define MAX_SERIAL_BUFFER    (64)  // What is the longest message Arduino can store?
+        
         
 // STEPPER  
-#define Y_ENABLE   5  
-#define Y_STEP     6  
-#define Y_DIR      7
 
-#define Z_ENABLE  2
-#define Z_STEP    3
-#define Z_DIR     4
 
-#define VAT_PRESSURE_SENSOR A0
+#define VAT_SERVO_PIN A0
 
-#define MAX_Z_ACCELERATION  9999000
-#define MAX_Z_SPEED 9990000
+#define Z_ENABLE_PIN  2
+#define Z_STEP_PIN    3
+#define Z_DIR_PIN     4
 
-#define MAX_Y_ACCELERATION  99999.0
-#define MAX_Y_SPEED 9999.0
+#define Y_ENABLE_PIN   5  
+#define Y_STEP_PIN     6  
+#define Y_DIR_PIN      7
 
-#define Y_STEPS_PER_MM 80
-#define Z_STEPS_PER_MM 7650
 
-#define Y_RESOLUTION 40
-#define Z_RESOLUTION 20
+#define Y_STEPS_PER_MM 4000
+#define Z_STEPS_PER_MM 16000
 
-#define FLOW_CONTROL_DISTANCE Z_STEPS_PER_MM*2
+#define Y_RESOLUTION Z_STEPS_PER_MM  // equals 1/10 mm
+#define Z_RESOLUTION Y_STEPS_PER_MM  // equals 1/10 mm
 
-#define END_POSITION_OFFSET Z_STEPS_PER_MM*30
-
-#define LAYER_HEIGHT Z_STEPS_PER_MM/Z_RESOLUTION
-#define LINE_WIDTH   Y_STEPS_PER_MM/Y_RESOLUTION
-
-#define STEPS_PER_REVOLUTION 200
+#define STEPS_PER_TURN 200
 #define MICROSTEP   A5 
-
-// Laser Thickness or Line Width
-
 
 
 // ENDSTOPS
@@ -54,7 +36,6 @@
 #define Z_ENDSTOP  A3
 
 // LASER
-
 #define LASER_PIN         9
 #define LASER_PORT        B
 #define LASER_BIT         1
@@ -62,15 +43,16 @@
 #define LASER_PWM_BIT     6
 #define LASER_PWM_PIN     6
 
-#define LASER_EXPOSING_CYCLES 35
-#define LASER_POINT_SCALER 24
+#define LASER_EXPOSING_CYCLES 1000
+#define LASER_POINT_SCALER 15
 
-// OPTO
-
+// OPTO TRIGGER PIN
 #define OPTO_PIN 8
 
+#define SERVO_MAX_POS 90
+#define SERVO_MIN_POS 30
 
-// USEFUL MACROS
+// USEFUL MACROS DO NOT CHANGE
 
 #define PORT_(port) PORT ## port 
 #define DDR_(port)  DDR  ## port 

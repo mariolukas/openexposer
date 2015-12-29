@@ -1,7 +1,7 @@
 // AccelStepper.cpp
 //
 // Copyright (C) 2009-2013 Mike McCauley
-// $Id: AccelStepper.cpp,v 1.17 2013/08/02 01:53:21 mikem Exp mikem $
+// $Id: AccelStepper.cpp,v 1.19 2014/10/31 06:05:27 mikem Exp mikem $
 
 #include "AccelStepper.h"
 
@@ -196,7 +196,7 @@ AccelStepper::AccelStepper(uint8_t interface, uint8_t pin1, uint8_t pin2, uint8_
     _targetPos = 0;
     _speed = 0.0;
     _maxSpeed = 1.0;
-    _acceleration = 1.0;
+    _acceleration = 0.0;
     _sqrt_twoa = 1.0;
     _stepInterval = 0;
     _minPulseWidth = 1;
@@ -219,6 +219,8 @@ AccelStepper::AccelStepper(uint8_t interface, uint8_t pin1, uint8_t pin2, uint8_
 	_pinInverted[i] = 0;
     if (enable)
 	enableOutputs();
+    // Some reasonable default
+    setAcceleration(1);
 }
 
 AccelStepper::AccelStepper(void (*forward)(), void (*backward)())
@@ -228,7 +230,7 @@ AccelStepper::AccelStepper(void (*forward)(), void (*backward)())
     _targetPos = 0;
     _speed = 0.0;
     _maxSpeed = 1.0;
-    _acceleration = 1.0;
+    _acceleration = 0.0;
     _sqrt_twoa = 1.0;
     _stepInterval = 0;
     _minPulseWidth = 1;
@@ -251,6 +253,8 @@ AccelStepper::AccelStepper(void (*forward)(), void (*backward)())
     int i;
     for (i = 0; i < 4; i++)
 	_pinInverted[i] = 0;
+    // Some reasonable default
+    setAcceleration(1);
 }
 
 void AccelStepper::setMaxSpeed(float speed)
@@ -277,7 +281,8 @@ void AccelStepper::setAcceleration(float acceleration)
 	// Recompute _n per Equation 17
 	_n = _n * (_acceleration / acceleration);
 	// New c0 per Equation 7
-	_c0 = sqrt(2.0 / acceleration) * 1000000.0;
+//	_c0 = sqrt(2.0 / acceleration) * 1000000.0; // Accelerates at half the expected rate. Why?
+	_c0 = sqrt(1.0/acceleration) * 1000000.0;
 	_acceleration = acceleration;
 	computeNewSpeed();
     }
@@ -347,6 +352,8 @@ void AccelStepper::setOutputPins(uint8_t mask)
     uint8_t numpins = 2;
     if (_interface == FULL4WIRE || _interface == HALF4WIRE)
 	numpins = 4;
+    else if (_interface == FULL3WIRE || _interface == HALF3WIRE)
+	numpins = 3;
     uint8_t i;
     for (i = 0; i < numpins; i++)
 	digitalWrite(_pin[i], (mask & (1 << i)) ? (HIGH ^ _pinInverted[i]) : (LOW ^ _pinInverted[i]));
@@ -544,6 +551,10 @@ void    AccelStepper::enableOutputs()
     {
         pinMode(_pin[2], OUTPUT);
         pinMode(_pin[3], OUTPUT);
+    }
+    else if (_interface == FULL3WIRE || _interface == HALF3WIRE)
+    {
+        pinMode(_pin[2], OUTPUT);
     }
 
     if (_enablePin != 0xff)

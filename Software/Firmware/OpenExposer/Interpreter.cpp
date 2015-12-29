@@ -133,7 +133,7 @@ void processCommand() {
     break;
   case 7:
        create_test_pattern();
-       expose_line(parsenumber('E',1000));
+       expose_line(parsenumber('E',50000));
      break;  
   case 29:
       //home z- axis
@@ -167,6 +167,14 @@ void processCommand() {
   case 20:
      laser_off();
     break;
+  case 21:
+    vat_down();
+    break;
+  case 22:
+    vat_up();
+    break;
+       
+    
   case 100:  help();  break;
   case 110:  line_number = parsenumber('N',line_number);  break;
   case 114:  

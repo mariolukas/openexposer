@@ -6,17 +6,16 @@
 #include "WProgram.h"
 #endif
 
-extern uint16_t offset;
-extern uint16_t data_table[512];
-extern volatile uint8_t write_line_enable;
+
 extern uint8_t exposing_done;
 
-void laser_init();
+void init_laser_driver();
 void laser_on();
 void laser_off();
-void laser_write_line();
-void exposeLine();
-void set_exposing_cycles();
+void expose_line(int time);
+void set_exposing_cycles(uint8_t cycles);
+void fill_laser_buffer(long distance);
+void create_test_pattern();
 
 #endif
 

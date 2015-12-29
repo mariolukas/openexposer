@@ -4,19 +4,21 @@
 #include "configuration.h"
 #include <util/delay.h>
 
-uint16_t offset = 0ul;
+uint16_t offset = 2000ul;
 
-uint16_t data_table[512];
-uint16_t begin_delay = 7500+offset;
+uint16_t laser_data[512];
+uint16_t begin_delay = 3800+offset;
 uint16_t end_delay = 47500ul;
 uint16_t sync_timeout_delay = 60000ul;
 
+int laser_data_position = 0;
+
 static uint8_t laser_state;
-volatile uint8_t write_line_enable = 1;
+volatile uint8_t write_line_enable = 0;
 static uint16_t last_line_start;
 
-int exposing_cycle_count = LASER_EXPOSING_CYCLES;
-int exposing_cycles = 0;
+int exposing_cycles = 5;
+int exposed_cycles = 0;
 uint8_t exposing_done = 0;
 
 
@@ -47,7 +49,7 @@ ISR(TIMER1_CAPT_vect){
 
 void laser_write_line(){
 
-	uint16_t * data = data_table;
+	uint16_t * data = laser_data;
 
 	//wait for OCR0A compare match (begin of line, laser off)
 	while((TIFR1 & (1<<OCF1A)) == 0);
@@ -86,7 +88,7 @@ ISR(TIMER1_COMPB_vect){
                 TCCR1A = (1<<COM1A1) | (1<<FOC1A);
 		if(write_line_enable){
 			laser_write_line();
-                        exposing_cycles++;
+                       // exposed_cycles++;
 
 		} else {
                      while((TIFR1 & (1<<OCF1A)) == 0);
@@ -95,13 +97,17 @@ ISR(TIMER1_COMPB_vect){
 	                 TIFR1 = (1<<OCF1A);
                     
                 }
+                
+                /*
+                if(exposed_cycles == exposing_cycles){
             
-                if(exposing_cycles == exposing_cycle_count){
-            
-                    exposing_cycles = 0;
+                    write_line_enable = 0;
+                    exposed_cycles = 0;
                     exposing_done = 1;
+              
                     
-                }   
+                }
+                */
                 
 		TCCR1A = (1<<COM1A1) ;
 		TCCR1A = (1<<COM1A1) | (1<<FOC1A); //Assure that laser is off		
@@ -143,42 +149,44 @@ ISR(TIMER1_COMPB_vect){
 
 }
 
-// fill data table with test pattern
-void fill_data_table(){
 
-	uint16_t x;
-     
-       
-        for(x=0;x < 80; x++){
-   
-	    data_table[x] = 400-x;
-            
+
+// fill data table with test pattern
+void create_test_pattern(){
+
+        
+        for(laser_data_position=0;laser_data_position < 80; laser_data_position++){
+	    laser_data[laser_data_position] = 500-laser_data_position;
         }
         
-       data_table[81] = 0;
+       laser_data[81] = 0;
        
-       
-       
-       data_table[0] = 5000;
-       data_table[1] = 40;
-       data_table[2] = 0;
-       
-       
-       //data_table[0] = 0;
+       laser_data_position = 0;
+
 }
 
 
-void set_exposing_cycles(){
-      
+void set_exposing_cycles(uint8_t cycles){
+      exposing_cycles = cycles;
 }
 
+
+void expose_line(int time){
+  //fill_laser_buffer(0);
+  
+
+   delay(5);
+   write_line_enable = 1;
+    delay(time);
+   write_line_enable = 0;
+ 
+}
 
 
 // initialize laser 
-void laser_init(){
+void init_laser_driver(){
   
-        
-	fill_data_table();
+	create_test_pattern();
         
         SET_DDR(LASER);
         
@@ -189,6 +197,18 @@ void laser_init(){
 
 }
 
+void fill_laser_buffer(long distance){
+   
+    if (distance == 0) {
+      laser_data[laser_data_position] = 0;
+      laser_data_position = 0;
+    } else {
+      laser_data[laser_data_position] = distance  * LASER_POINT_SCALER;
+      laser_data_position++;
+    }
+    delay(1);
+    
+}
 
 // Turn Laser Timer on and activate Opto Capture
 void laser_on(){
@@ -201,6 +221,8 @@ void laser_on(){
           
   	TIFR1 = (1<<OCF1B) | (1<<ICF1);
 	TIMSK1 |= (1<<OCIE1B) | (1<<ICIE1); //capture b and icp int on (they do all the work)	
+        
+        
 }
 
 // Turn Laser Timer off and deactivate laser opto

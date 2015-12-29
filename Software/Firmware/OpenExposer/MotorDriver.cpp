@@ -1,10 +1,39 @@
+
 #include "configuration.h"
+//#include "ServoTimer2.h"
 #include "MotorDriver.h"
 #include "AccelStepper.h"
 #include "LaserDriver.h"
 
+
 AccelStepper y(1, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper z(2, Z_STEP_PIN, Z_DIR_PIN);
+//ServoTimer2 vat_servo;
+
+void vat_down(){
+
+ // vat_servo.attach(VAT_SERVO_PIN); 
+  
+  for(int pos=SERVO_MAX_POS; pos > SERVO_MIN_POS; pos--){
+      
+      //vat_servo.write(degreesToMS(pos));
+      delay(10);
+  }; 
+ 
+}
+
+void vat_up(){
+
+  for(int pos=SERVO_MIN_POS; pos < SERVO_MAX_POS; pos++){
+     // vat_servo.write(degreesToMS(pos));
+      delay(10);
+  }; 
+ // vat_servo.detach(); 
+
+
+}
+
+
 
 void motors_release(){
   digitalWrite(Z_ENABLE_PIN, HIGH);
@@ -86,6 +115,8 @@ void do_move(float y_distance, float z_distance, float feedrate){
 
 void init_motor_driver(){
     pinMode(MICROSTEP,OUTPUT);
+    
+
     
     pinMode(Z_ENABLE_PIN, OUTPUT);
     pinMode(Y_ENABLE_PIN, OUTPUT);
