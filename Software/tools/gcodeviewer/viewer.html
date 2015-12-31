@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>G-Code Viewer</title>
+  <link rel="stylesheet" type="text/css" href="rzslider.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+  <script src="rzslider.js"></script>
+  <script>
+var gcodeViewApp = angular.module('gcodeViewApp', ['rzModule']);
+
+gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
+  $scope.file = "";
+  $scope.gcode = "";
+  $scope.maxX = 1;
+  $scope.maxY = 1;
+  $scope.layers = [];
+  $scope.currentLayer = 0;
+  $scope.zoom = 1;
+  $scope.zoomOptions = {
+    floor: 1,
+    ceil: 5
+  };
+  $scope.position = {
+    x: 0,
+    y: 0
+  };
+  $scope.positionXOptions = {
+    floor: 0,
+    ceil: 0
+  };
+  $scope.positionYOptions = {
+    floor: 0,
+    ceil: 0,
+    vertical: true
+  };
+  $scope.$watch("zoom", function(newZoomLevel) {
+    $scope.positionXOptions.ceil = $scope.maxX-($scope.maxX/newZoomLevel);
+    $scope.positionYOptions.ceil = $scope.maxY-($scope.maxY/newZoomLevel);
+  });
+  $scope.loadGCode = function() {
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+      var reader = new FileReader();
+      reader.onload = function (loadEvent) {
+        $scope.$apply(function () {
+          $scope.gcode = loadEvent.target.result;
+          $scope.layers = [];
+          var lines = $scope.gcode.split("\n");
+          var line = null;
+          var lineFinished = true;
+          var maxY = 1;
+          var maxX = 1;
+          var yPosition = 0;
+          var xPosition = 0;
+          var lineOpen = false;
+          var layer = -1;
+          for(var i=0, len=lines.length; i < len; i++) {
+            line = lines[i];
+            if(line.indexOf("G01 Z") == 0) {
+              // New Layer started
+              ++layer;
+              $scope.layers[layer] = [];
+            } else if(line.indexOf("G01 Y") == 0) {
+              // adjust Y position
+              var remainingString = line.substring(5);
+              var yDistance = Number(remainingString);
+              yPosition += yDistance;
+              if(yPosition > maxY) {
+                maxY = yPosition;
+              }
+              xPosition = 0;
+            } else if(line.indexOf("G05 D0") == 0) {
+              if(lineFinished) {
+                console.error("Error in line "+i+": line finished without started");
+              } else {
+                if(lineOpen) {
+                  console.error("Error in line "+i+": line not closed");
+                }
+                lineFinished = true;
+                xPosition = 0;
+              }
+            } else if(line.indexOf("G05 D") == 0) {
+              if(lineFinished) {
+                lineFinished = false;
+              }
+              var remainingString = line.substring(5);
+              var xDistance = Number(remainingString);
+              if(lineOpen) {
+                $scope.layers[layer].unshift({y:yPosition, x1:xPosition, x2: xPosition+xDistance});
+                lineOpen = false;
+                xPosition += xDistance;
+              } else {
+                lineOpen = true;
+                xPosition += xDistance;
+              }
+              if(xPosition > maxX) {
+                maxX = xPosition;
+              }
+            }
+          }
+          $scope.maxX = maxX;
+          $scope.maxY = maxY;
+          $scope.layer = $scope.layers[0];
+          $scope.zoom = 1;
+          $scope.position.x = 0;
+          $scope.position.y = 0;
+        });
+      }
+      reader.readAsText($scope.file);
+    } else {
+      alert('The File APIs are not fully supported in this browser.');
+    }
+};
+}]);
+
+gcodeViewApp.directive("fileread", [function () {
+    return {
+        restrict: 'A',
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.fileread = changeEvent.target.files[0];
+                });
+            });
+        }
+    }
+}]);
+
+gcodeViewApp.config(function($logProvider){
+    $logProvider.debugEnabled(true);
+});
+  </script>
+</head>
+<body ng-app="gcodeViewApp">
+  <div ng-controller="GCodeController">
+    <div class="viewer" style="float:left;">
+      <svg ng-attr-width="{{ 800 }}" ng-attr-height="{{ 800 * (maxY/maxX) }}" ng-attr-view_box="{{ position.x }} {{ position.y }} {{ maxX / zoom }} {{ maxY / zoom }}">
+        <line ng-attr-x1="{{ line.x1 }}" ng-attr-y1="{{ line.y }}" ng-attr-x2="{{ line.x2 }}" ng-attr-y2="{{ line.y }}" style="stroke:rgb(255,0,0);stroke-width:2" ng-repeat="line in layer"/>
+      </svg>
+      <rzslider rz-slider-model="position.x" rz-slider-options="positionXOptions"></rzslider>
+      <rzslider rz-slider-model="position.y" rz-slider-options="positionYOptions"></rzslider>
+      <rzslider rz-slider-model="zoom" rz-slider-options="zoomOptions"></rzslider>
+    </div>
+    <div class="gcode" style="float:right;">
+      <pre ng-bind="gcode" style="max-height: 15em; overflow-y: scroll;"></pre>
+      <input type="file" fileread="file"></input>
+      <button ng-click="loadGCode()">Load G-Code</button>
+      <select ng-options="'Layer '+idx for (idx, layer) in layers" ng-model="layer" />
+    </div>
+  </div>
+</body>
+</html>

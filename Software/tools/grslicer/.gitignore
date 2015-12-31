@@ -1,0 +1,11 @@
+.idea/
+*.pyc
+build/
+dist
+*.c
+*.o
+.ipynb_checkpoints
+*.ipynb
+MANIFEST
+grslicer/util/cynp.so
+*.egg-info

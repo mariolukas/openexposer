@@ -1,0 +1,4 @@
+Cython==0.22
+numpy==1.9.2
+pyclipper==0.9.3b0
+Quadtree==0.1.2
