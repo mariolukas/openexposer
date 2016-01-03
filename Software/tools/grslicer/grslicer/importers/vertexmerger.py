@@ -13,6 +13,7 @@ class VertexMerger(object):
         self.sh = sht.SpatialHash(cell_size)
         self._current_face = None
         self._current_tmp_vertices = None
+        self._last_face = None
 
     def add(self, vector):
         if self._current_face is None:
@@ -63,7 +64,11 @@ class VertexMerger(object):
                     vertex_2.add_edge(edge)
 
             # reset for the next face
+            self._last_face = self._current_face
             self._current_face = None
+
+    def set_last_face_normal(self, normal):
+        self._last_face.normal = normal
 
     def finalize(self):
         self.tm.purge_mx()

@@ -120,7 +120,7 @@ class ScanlineSlicer(object):
         """ Returns heights at which model should be sliced. Starts at <layer_height>
         """
         aabb = self.tm.aabb
-        self._slicing_positions = np_range(aabb.min[2] + self.s.layerHeight, aabb.max[2], self.s.layerHeight)
+        self._slicing_positions = np_range(aabb.min[2] + self.s.layerHeight/2+0.001, aabb.max[2], self.s.layerHeight, endpoint=False)
         self._scanline_positions = np_range(aabb.min[1], aabb.max[1], self.s.scanlineSpacing)
 
     def _init_face_height_map(self):
@@ -140,7 +140,7 @@ class ScanlineSlicer(object):
                         idx_start -= 1
                     idx_end = int((h2 - bottom) // lh) + 1
                     for h in self._slicing_positions[idx_start:idx_end]:
-                        if h1 < h <= h2:
+                        if h1 <= h <= h2:
                             self._face_map.setdefault(h, set()).add(face.mxid)
 
     @progress_log('Slicing model with fixed layer heights')
@@ -163,13 +163,11 @@ class ScanlineSlicer(object):
                 points = []
 
                 to_visit = self._face_map[h]
+                scanline_point = [0, scanline_y, h]
+                scanline_direction = [1, 0, 0]
 
                 for face_id in to_visit:
-                    scanline_point = [0, scanline_y, h]
-                    scanline_direction = [1, 0, 0]
                     face = self.tm.faces[face_id]
-
-                    # intersect the edge
 
                     result, intersection_point = _intersect_face_line(face, scanline_point, scanline_direction)
 
@@ -179,7 +177,7 @@ class ScanlineSlicer(object):
                         pass
 
                     elif result == 1:
-                        #print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 1 ("+str(intersection_point)+")"
+                        #print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 1 ("+str(intersection_point)+") direction "+str(direction)
 
                         points.append(intersection_point)
 
@@ -201,7 +199,7 @@ class ScanlineSlicer(object):
                     for point in points:
                         found = False
                         for other_point in unique_points:
-                            if np.linalg.norm(point-other_point) < 0.001:
+                            if np.linalg.norm(point[0:3]-other_point[0:3]) < 0.0001:
                                 found = True
                         if not found:
                             unique_points.append(point)
@@ -251,17 +249,18 @@ def _intersect_face_line(face, scanline_point, scanline_direction):
     vc = face.vertex_c.vector
     u = vb - va #u = T.V1 - T.V0;
     v = vc - va #v = T.V2 - T.V0;
-    n = np.cross(u, v) #n = u * v;              // cross product
+    n2 = np.cross(u, v) #n = u * v;              // cross product
+    n = face.normal
 
-    if n[0] == np.float32(0) and n[1] == np.float32(0) and n[2] == np.float32(0): # // triangle is degenerate
+    if n[0] == DEFAULT_COORDINATE_TYPE(0) and n[1] == DEFAULT_COORDINATE_TYPE(0) and n[2] == DEFAULT_COORDINATE_TYPE(0): # // triangle is degenerate
         return (-1, None)                   #// do not deal with this case
 
     dir = to_ndarray(scanline_direction) #dir = R.P1 - R.P0; // ray direction vector
     w0 = to_ndarray(scanline_point) - va # w0 = R.P0 - T.V0;
     a = - np.dot(n, w0) # a = -dot(n,w0);
     b = np.dot(n, dir) # b = dot(n,dir);
-    if abs(b) < np.float32(SMALL_NUM): #if (fabs(b) < SMALL_NUM) {     // ray is  parallel to triangle plane
-        if a == np.float32(0): #    if (a == 0)                 // ray lies in triangle plane
+    if abs(b) < DEFAULT_COORDINATE_TYPE(SMALL_NUM): #if (fabs(b) < SMALL_NUM) {     // ray is  parallel to triangle plane
+        if a == DEFAULT_COORDINATE_TYPE(0): #    if (a == 0)                 // ray lies in triangle plane
             return (2, None)
         else:
             return (0, None) #              // ray disjoint from plane
@@ -269,29 +268,32 @@ def _intersect_face_line(face, scanline_point, scanline_direction):
 
     # // get intersect point of ray with triangle plane
     r = a / b # r = a / b;
-    if r < np.float32(0.0): # if (r < 0.0)                    // ray goes away from triangle
+    if r < DEFAULT_COORDINATE_TYPE(0.0): # if (r < 0.0)                    // ray goes away from triangle
         return (0, None) #                  // => no intersect
     # // for a segment, also test if (r > 1.0) => no intersect
 
-    I = to_ndarray(scanline_point) + r * dir #*I = R.P0 + r * dir;            // intersect point of ray and plane
+    I = to_ndarray([scanline_point[0]+r, scanline_point[1], scanline_point[2], np.dot(n, dir)/abs(np.dot(n, dir))]) #*I = R.P0 + r * dir;            // intersect point of ray and plane
 
     # // is I inside T?
     # float    uu, uv, vv, wu, wv, D;
     uu = np.dot(u, u) # uu = dot(u,u);
     uv = np.dot(u, v) # uv = dot(u,v);
     vv = np.dot(v, v) # vv = dot(v,v);
-    w = I - va # w = *I - T.V0;
+    w = I[0:3] - va # w = *I - T.V0;
     wu = np.dot(w, u) # wu = dot(w,u);
     wv = np.dot(w, v) # wv = dot(w,v);
     D = uv * uv - uu * vv # D = uv * uv - uu * vv;
 
+    if D == DEFAULT_COORDINATE_TYPE(0.0):
+        return (0, None)
+
     # // get and test parametric coords
     # float s, t;
     s = (uv * wv - vv * wu) / D # s = (uv * wv - vv * wu) / D;
-    if s < np.float32(0.0) or s > np.float32(1.0): # if (s < 0.0 || s > 1.0)         // I is outside T
+    if s < DEFAULT_COORDINATE_TYPE(0.0) or s > DEFAULT_COORDINATE_TYPE(1.0): # if (s < 0.0 || s > 1.0)         // I is outside T
         return (0, None)
     t = (uv * wu - uu * wv) / D # t = (uv * wu - uu * wv) / D;
-    if t < np.float32(0.0) or (s+t) > np.float32(1.0): # if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+    if t < DEFAULT_COORDINATE_TYPE(0.0) or (s+t) > DEFAULT_COORDINATE_TYPE(1.0): # if (t < 0.0 || (s + t) > 1.0)  // I is outside T
         return (0, None)
 
     return (1, I) #                      // I is in T

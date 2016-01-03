@@ -1,7 +1,7 @@
 from struct import unpack
 
 import vertexmerger
-from grslicer.model import TopoModel
+from grslicer.model import TopoModel, DEFAULT_COORDINATE_TYPE
 from grslicer.util.np import to_ndarray
 from grslicer.importers.base import ModelImporter
 from grslicer.util.progress import progress_log
@@ -18,7 +18,7 @@ class StlAsciiImporter(ModelImporter, vertexmerger.VertexMerger):
         self.vertex_nr = self._get_face_nr() * 3
 
         self.merger = vertexmerger.VertexMerger(TopoModel(shape=(self.vertex_nr * 3, 3)),
-                                                self.settings.roundOffError)
+                                                DEFAULT_COORDINATE_TYPE(self.settings.roundOffError))
 
     def _get_face_nr(self):
         return self.contents.count('facet normal')
@@ -32,14 +32,22 @@ class StlAsciiImporter(ModelImporter, vertexmerger.VertexMerger):
 
         progress.set_size(self.vertex_nr)
 
+        normal_kw = 'facet normal'
         vertex_kw = 'vertex'
-        for line in self.contents.splitlines():
+        end_facet_kw = 'endfacet'
+        for line_number, line in enumerate(self.contents.splitlines()):
+            if normal_kw in line:
+                normal = to_ndarray([DEFAULT_COORDINATE_TYPE(x) for x in line.strip().split()[-3:]])
+                if normal == [0.0, 0.0, 0.0]:
+                    raise ValueError("missing normal in line "+str(line_number))
             if vertex_kw in line:
                 # parse vector coordinates
                 vector = to_ndarray([float(x) for x in line.strip().split()[-3:]])
                 self.merger.add(vector)
 
                 progress.inc()
+            if end_facet_kw in line:
+                self.merger.set_last_face_normal(normal)
 
         self.merger.finalize()
 
@@ -65,12 +73,16 @@ class StlBinImporter(StlAsciiImporter):
         byte_idx = 84
 
         for face_idx in range(self._get_face_nr()):
+            normal = self._parse_vector(byte_idx)
+            if normal == [0.0, 0.0, 0.0]:
+                raise ValueError("missing normal in face "+str(face_idx))
             for vertex_idx in range(1, 4):
                 vector = to_ndarray(self._parse_vector(byte_idx + 12 * vertex_idx))
                 self.merger.add(vector)
 
                 progress.inc()
 
+            self.merger.set_last_face_normal(normal)
             byte_idx += 50
 
         self.merger.finalize()
@@ -83,5 +95,5 @@ class StlBinImporter(StlAsciiImporter):
         xyz = []
         for coordinate_index in range(3):
             pos_start = position + coordinate_index * 4
-            xyz.append(unpack('f', self.contents[pos_start: pos_start + 4])[0])
+            xyz.append(DEFAULT_COORDINATE_TYPE(unpack('f', self.contents[pos_start: pos_start + 4])[0]))
         return xyz

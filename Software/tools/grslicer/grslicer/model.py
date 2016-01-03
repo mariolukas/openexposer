@@ -193,6 +193,10 @@ class TopoFace(TopoEdge):
     FACES_NR = 0
     SHORT_CODE = 'F'
 
+    def __init__(self, mxid=None, model=None):
+        super(TopoFace, self).__init__(mxid=None, model=None)
+        self.normal = None
+
     @property
     def vertex_c(self):
         return list(self.vertices)[2]
