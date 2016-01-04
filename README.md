@@ -37,7 +37,8 @@ The laser unit uses a TTL laser driver. The laser driver Board is located in the
 ## Software
 
 ### Slicing
-In the first Step the STL files should be sliced with Sli3r to SVG files. Then the SVG file should be post processed by the Open Exposer slicer tool. This tool creates Open Exposer compatible g-code files.
+In Software/Tools you will find grslicer. Which is able to slice STL files to open exposer G-Code. You can use g-code viewer check the results.
+There is a folder test Pattern which generates a test pattern g-code. This g-code can be uses for example for a calibration process.
 
 ### Host
 The host application is a small python script which sends the g-code files line by line to the Open Exposer
@@ -50,10 +51,9 @@ Open Exposer Arduino Firmware.
 
 * uv PCB exposing
 
-##I'll keep you informed
+##We will keep you informed
 *	<a href="http://twitter.com/l_k3">Twitter</a>
 *	<a href="https://www.youtube.com/user/clustermaster23">Youtube</a>
-*	<a href="https://www.facebook.com/pages/Mario-Lukas/714788148580621">Facebook</a>
 *	<a href="http://www.mariolukas.de/?s=openexposer">Blog</a>
 *	<a href="https://hackaday.io/project/1129-openexposer">hackday.io (Hackaday Prize Project 2014)</a>
 
