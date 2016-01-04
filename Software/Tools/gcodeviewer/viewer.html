@@ -14,6 +14,8 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
   $scope.gcode = "";
   $scope.maxX = 1;
   $scope.maxY = 1;
+  $scope.minX = 0;
+  $scope.minY = 0;
   $scope.layers = [];
   $scope.currentLayer = 0;
   $scope.zoom = 1;
@@ -35,8 +37,12 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
     vertical: true
   };
   $scope.$watch("zoom", function(newZoomLevel) {
-    $scope.positionXOptions.ceil = $scope.maxX-($scope.maxX/newZoomLevel);
-    $scope.positionYOptions.ceil = $scope.maxY-($scope.maxY/newZoomLevel);
+    var xSize = $scope.maxX - $scope.minX;
+    var ySize = $scope.maxY - $scope.minY;
+    $scope.positionXOptions.ceil = xSize-(xSize/newZoomLevel);
+    $scope.positionYOptions.ceil = ySize-(ySize/newZoomLevel);
+    $scope.position.x = $scope.positionXOptions.ceil/2;
+    $scope.position.y = $scope.positionYOptions.ceil/2;
   });
   $scope.loadGCode = function() {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -50,10 +56,13 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
           var lineFinished = true;
           var maxY = 1;
           var maxX = 1;
+          var minY = 0;
+          var minX = 0;
           var yPosition = 0;
           var xPosition = 0;
           var lineOpen = false;
           var layer = -1;
+          var lineSpacings = [];
           for(var i=0, len=lines.length; i < len; i++) {
             line = lines[i];
             if(line.indexOf("G01 Z") == 0) {
@@ -64,12 +73,16 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
               // adjust Y position
               var remainingString = line.substring(5);
               var yDistance = Number(remainingString);
+              lineSpacings.unshift(yDistance);
               yPosition += yDistance;
               if(yPosition > maxY) {
                 maxY = yPosition;
               }
+              if(yPosition < minY) {
+                minY = yPosition;
+              }
               xPosition = 0;
-            } else if(line.indexOf("G05 D0") == 0) {
+            } else if(line.indexOf("G06 E") == 0) {
               if(lineFinished) {
                 console.error("Error in line "+i+": line finished without started");
               } else {
@@ -96,10 +109,16 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
               if(xPosition > maxX) {
                 maxX = xPosition;
               }
+              if(xPosition < minX) {
+                minX = xPosition;
+              }
             }
           }
-          $scope.maxX = maxX;
-          $scope.maxY = maxY;
+          $scope.lineWidth = lineSpacings[Math.round(lineSpacings.length/2)]/2.5;
+          $scope.maxX = maxX+20;
+          $scope.maxY = maxY+20;
+          $scope.minX = minX-20;
+          $scope.minY = minY-20;
           $scope.layer = $scope.layers[0];
           $scope.zoom = 1;
           $scope.position.x = 0;
@@ -137,12 +156,14 @@ gcodeViewApp.config(function($logProvider){
 <body ng-app="gcodeViewApp">
   <div ng-controller="GCodeController">
     <div class="viewer" style="float:left;">
-      <svg ng-attr-width="{{ 800 }}" ng-attr-height="{{ 800 * (maxY/maxX) }}" ng-attr-view_box="{{ position.x }} {{ position.y }} {{ maxX / zoom }} {{ maxY / zoom }}">
-        <line ng-attr-x1="{{ line.x1 }}" ng-attr-y1="{{ line.y }}" ng-attr-x2="{{ line.x2 }}" ng-attr-y2="{{ line.y }}" style="stroke:rgb(255,0,0);stroke-width:2" ng-repeat="line in layer"/>
-      </svg>
+      <div style="position:relative;">
+        <rzslider style="height: 100%; position: absolute; right: 0px; margin-right: -20px;" rz-slider-model="position.y" rz-slider-options="positionYOptions"></rzslider>
+        <rzslider style="width: 20%; right: 20px; bottom: 20px; position: absolute;" rz-slider-model="zoom" rz-slider-options="zoomOptions"></rzslider>
+        <svg style="display: inline-block;" ng-attr-width="{{ 800 }}" ng-attr-height="{{ 800 * (maxY/maxX) }}" ng-attr-view_box="{{ position.x+minX }} {{ position.y+minY }} {{ (maxX-minX) / zoom }} {{ (maxY-minY) / zoom }}">
+          <line ng-attr-x1="{{ line.x1 }}" ng-attr-y1="{{ line.y }}" ng-attr-x2="{{ line.x2 }}" ng-attr-y2="{{ line.y }}" style="stroke:rgb(255,0,0);stroke-width:{{ lineWidth }};" ng-repeat="line in layer"/>
+        </svg>
+      </div>
       <rzslider rz-slider-model="position.x" rz-slider-options="positionXOptions"></rzslider>
-      <rzslider rz-slider-model="position.y" rz-slider-options="positionYOptions"></rzslider>
-      <rzslider rz-slider-model="zoom" rz-slider-options="zoomOptions"></rzslider>
     </div>
     <div class="gcode" style="float:right;">
       <pre ng-bind="gcode" style="max-height: 15em; overflow-y: scroll;"></pre>

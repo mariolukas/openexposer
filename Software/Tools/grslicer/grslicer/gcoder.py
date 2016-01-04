@@ -334,15 +334,15 @@ class GCodeWriter(object):
         self.buffer_count = 0
         self.buffer = ""
 
-    def move(self, x=None, y=None, z=None, e=None, f=None):
-        self.command_position('G01', x, y, z, e, f)
+    def move(self, x=None, y=None, z=None):
+        self.command_position('G01', x, y, z)
 
-    def command_position(self, command, x=None, y=None, z=None, e=None, f=None):
+    def command_position(self, command, x=None, y=None, z=None):
         self.write(command)
         if y is not None:
-            self.write(' Y{:d}'.format(y))
+            self.write(' Y{:d}'.format(self._scale_number(y)))
         if z is not None:
-            self.write(' Z{:d}'.format(z))
+            self.write(' Z{:d}'.format(self._scale_number(z)))
         self.nl()
 
     def machine_command(self, command):
@@ -350,7 +350,11 @@ class GCodeWriter(object):
         self.nl()
 
     def line_command(self, distance):
-        self.write('G05 D{:d}'.format(distance))
+        self.write('G05 D{:d}'.format(self._scale_number(distance)))
+        self.nl()
+
+    def expose_command(self, exposingCycles):
+        self.write('G06 E{:d}'.format(exposingCycles))
         self.nl()
 
     # def parameter(self, axis, value, precision):
@@ -385,6 +389,9 @@ class GCodeWriter(object):
         if self.buffer:
             self.fs.write(self.buffer)
 
+    def _scale_number(self, number):
+        return long(1000*number)
+
 
 class ScanlineGCoder(object):
     def __init__(self, model, settings, gcode_file):
@@ -399,6 +406,8 @@ class ScanlineGCoder(object):
         self.change_layer = True
         self.height = 0
         self.y = 0
+
+        self._model_center = model.get_center()
 
     @progress_log('Write layers to G-Code')
     def encode(self, progress):
@@ -431,7 +440,7 @@ class ScanlineGCoder(object):
 
     def encode_layer(self, layer, layer_seq_nr):
 
-        self.coder.move(z=long(100*(layer.height-self.height)))
+        self.coder.move(z=layer.height-self.height)
 
         self.height = layer.height
 
@@ -441,17 +450,25 @@ class ScanlineGCoder(object):
         self.coder.machine_command('M19')
 
         for line in layer.lines:
-            y_distance = line[0][1] - self.y
-            self.coder.move(y=long(y_distance*100))
+            y_distance = self._centered_y(line[0][1]) - self.y
+            self.coder.move(y=y_distance)
 
             x = 0
             for point in line:
-                x_distance = point[0] - x
-                self.coder.line_command(long(x_distance*100))
-                x = point[0]
-            self.coder.line_command(0)
-            self.y = line[0][1]
+                x_distance = self._centered_x(point[0]) - x
+                self.coder.line_command(x_distance)
+                x = self._centered_x(point[0])
+            self.coder.expose_command(self.s.exposingCycles)
+            self.y = self._centered_y(line[0][1])
 
         self.coder.comment('Disable laser')
         self.coder.machine_command('M20')
 
+    def _centered_x(self, x_position):
+        return x_position - self._model_center[0]
+
+    def _centered_y(self, y_position):
+        return y_position - self._model_center[1]
+
+    def _centered_z(self, z_position):
+        return z_position - self._model_center[2]
