@@ -169,25 +169,30 @@ class ScanlineSlicer(object):
                 for face_id in to_visit:
                     face = self.tm.faces[face_id]
 
-                    result, intersection_point = _intersect_face_line(face, scanline_point, scanline_direction)
+                    face_max_y = max(face.vertex_a.vector[1], face.vertex_b.vector[1], face.vertex_c.vector[1])
+                    face_min_y = min(face.vertex_a.vector[1], face.vertex_b.vector[1], face.vertex_c.vector[1])
 
-                    if result == 2:
-                        #print "Line within plane ("+str(face.vertex_a.vector)+"|"+str(face.vertex_b.vector)+"|"+str(face.vertex_c.vector)+")"
-                        #print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 2"
-                        pass
+                    if scanline_y <= face_max_y and scanline_y >= face_min_y:
 
-                    elif result == 1:
-                        #print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 1 ("+str(intersection_point)+") direction "+str(direction)
+                        result, intersection_point = _intersect_face_line(face, scanline_point, scanline_direction)
 
-                        points.append(intersection_point)
+                        if result == 2:
+                            #print "Line within plane ("+str(face.vertex_a.vector)+"|"+str(face.vertex_b.vector)+"|"+str(face.vertex_c.vector)+")"
+                            #print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 2"
+                            pass
 
-                    elif result == 0:
-                        # print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 0"
-                        pass
+                        elif result == 1:
+                            #print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 1 ("+str(intersection_point)+") direction "+str(direction)
 
-                    elif result == -1:
-                        # print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result -1"
-                        pass
+                            points.append(intersection_point)
+
+                        elif result == 0:
+                            # print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result 0"
+                            pass
+
+                        elif result == -1:
+                            # print "Testing face "+str(face.mxid)+" with scanline "+str(scanline_point)+" result -1"
+                            pass
 
                 if points:
                     points = np.array(points)
