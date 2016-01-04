@@ -2,10 +2,11 @@ from struct import unpack
 
 import vertexmerger
 from grslicer.model import TopoModel, DEFAULT_COORDINATE_TYPE
-from grslicer.util.np import to_ndarray
+from grslicer.util.np import to_ndarray, np
 from grslicer.importers.base import ModelImporter
 from grslicer.util.progress import progress_log
 
+NULL_VECTOR = to_ndarray([0.0, 0.0, 0.0])
 
 class StlAsciiImporter(ModelImporter, vertexmerger.VertexMerger):
     @staticmethod
@@ -38,7 +39,7 @@ class StlAsciiImporter(ModelImporter, vertexmerger.VertexMerger):
         for line_number, line in enumerate(self.contents.splitlines()):
             if normal_kw in line:
                 normal = to_ndarray([DEFAULT_COORDINATE_TYPE(x) for x in line.strip().split()[-3:]])
-                if normal == [0.0, 0.0, 0.0]:
+                if np.array_equal(normal, NULL_VECTOR):
                     raise ValueError("missing normal in line "+str(line_number))
             if vertex_kw in line:
                 # parse vector coordinates
