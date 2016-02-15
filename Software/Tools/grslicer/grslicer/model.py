@@ -229,6 +229,13 @@ class LayeredModel(object):
     def __repr__(self):
         return self.__str__()
 
+    def get_center(self):
+        bounding_box = self.aabb
+        center_x = bounding_box.max[0]-bounding_box.min[0]
+        center_y = bounding_box.max[1]-bounding_box.min[1]
+        center_z = bounding_box.max[2]-bounding_box.min[2]
+        return [center_x, center_y, center_z]
+
 
 class Layer(object):
     __slots__ = ['model', 'height', 'seq_nr', 'islands', 'skirts', 'lines']
