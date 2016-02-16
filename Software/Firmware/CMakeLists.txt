@@ -1,16 +1,17 @@
 cmake_minimum_required(VERSION 2.8.8)
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/ArduinoToolchain.cmake)
 set(PROJECT_NAME OpenExposer)
 project(${PROJECT_NAME})
-
-set(${CMAKE_PROJECT_NAME}_SKETCH OpenExposer.ino)
-generate_arduino_firmware(${CMAKE_PROJECT_NAME})
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall -Wno-deprecated)
 endif()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -pedantic -pthread")
+
+include_directories(
+        ${PROJECT_SOURCE_DIR}
+)
 #-------------------
 # set common include folder for module
 #-------------------
@@ -34,9 +35,10 @@ add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 enable_testing()
 set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
 include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
-
-file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
-add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES} test/TestLaserDriver.cpp.cpp)
+set(TEST_SRC_FILES
+        test/TestLaserDriver.cpp
+        )
+add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 add_dependencies(${PROJECT_TEST_NAME} googletest)
 
 
