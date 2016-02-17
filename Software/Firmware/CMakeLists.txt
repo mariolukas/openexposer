@@ -61,3 +61,11 @@ endif()
 target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
 add_test(test1 ${PROJECT_TEST_NAME})
+
+set(OpenExposer_PREFIX ${CMAKE_BINARY_DIR}/OpenExposer_Firmware)
+
+include(ExternalProject)
+
+ExternalProject_Add(OpenExposer_Firmware
+        SOURCE_DIR ${OpenExposer_SOURCE_DIR}/OpenExposer
+        )
