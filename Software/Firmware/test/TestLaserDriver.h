@@ -10,4 +10,8 @@
 extern laser_buffer_type data;
 extern size_t laser_data_position;
 
+extern long laser_timing_scale_dividend;
+extern long laser_timing_scale_divisor;
+extern uint16_t laser_timing_center_offset;
+
 #endif //OPENEXPOSER_TESTLASERDRIVER_H

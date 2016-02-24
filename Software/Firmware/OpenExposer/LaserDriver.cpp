@@ -13,6 +13,10 @@ uint16_t sync_timeout_delay = 60000ul;
 
 size_t laser_data_position = 0;
 
+long laser_timing_scale_dividend = LASER_TIMING_SCALE_DIVIDEND;
+long laser_timing_scale_divisor = LASER_TIMING_SCALE_DIVISOR;
+uint16_t laser_timing_center_offset = LASER_TIMING_CENTER_OFFSET;
+
 static uint8_t laser_state;
 volatile uint8_t write_line_enable = 0;
 static uint16_t last_line_start;
@@ -207,8 +211,10 @@ void fill_laser_buffer(long distance){
 }
 
 void convert_positions_to_timings() {
+	long current_position = 0;
 	for(int i = 0; i < laser_data_position; ++i) {
-		data.laser_timings[i] = data.positions[i] * LASER_POINT_SCALER;
+		current_position += data.positions[i];
+		data.laser_timings[i] = current_position * laser_timing_scale_dividend / laser_timing_scale_divisor + laser_timing_center_offset;
 	}
 	data.laser_timings[laser_data_position] = 0;
 }
@@ -220,12 +226,9 @@ void laser_on(){
 
 	OCR1B = 0;
 	OCR1A = 0;
-      
-          
+
   	TIFR1 = (1<<OCF1B) | (1<<ICF1);
 	TIMSK1 |= (1<<OCIE1B) | (1<<ICIE1); //capture b and icp int on (they do all the work)	
-        
-        
 }
 
 // Turn Laser Timer off and deactivate laser opto
@@ -234,8 +237,3 @@ void laser_off(){
 	TIMSK1 &= ~ ((1<<OCIE1B) | (1<<ICIE1)); //ints off
 	TCCR1A = 0; //disconnect laser from timer
 }
-
-
-
-
-
