@@ -1,17 +1,17 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "LaserDriver.h"
-#include "configuration.h"
 #include <util/delay.h>
 
 uint16_t offset = 2000ul;
 
-uint16_t laser_data[512];
+laser_buffer_type data;
+
 uint16_t begin_delay = 3800+offset;
 uint16_t end_delay = 47500ul;
 uint16_t sync_timeout_delay = 60000ul;
 
-int laser_data_position = 0;
+size_t laser_data_position = 0;
 
 static uint8_t laser_state;
 volatile uint8_t write_line_enable = 0;
@@ -49,7 +49,7 @@ ISR(TIMER1_CAPT_vect){
 
 void laser_write_line(){
 
-	uint16_t * data = laser_data;
+	uint16_t * timings = data.laser_timings;
 
 	//wait for OCR0A compare match (begin of line, laser off)
 	while((TIFR1 & (1<<OCF1A)) == 0);
@@ -62,7 +62,7 @@ void laser_write_line(){
        
 	while(1){
 
-		uint16_t tmp  = *data++;
+		uint16_t tmp  = *timings++;
 
 		if(tmp == 0){               //end mark?
 			break;                    //yes: end line
@@ -154,15 +154,13 @@ ISR(TIMER1_COMPB_vect){
 // fill data table with test pattern
 void create_test_pattern(){
 
-        
-        for(laser_data_position=0;laser_data_position < 80; laser_data_position++){
-	    laser_data[laser_data_position] = 500-laser_data_position;
-        }
-        
-       laser_data[81] = 0;
-       
-       laser_data_position = 0;
+	for(laser_data_position=0;laser_data_position < 80; laser_data_position++){
+		data.laser_timings[laser_data_position] = 500-laser_data_position;
+	}
 
+	data.laser_timings[81] = 0;
+
+   laser_data_position = 0;
 }
 
 
@@ -188,26 +186,31 @@ void init_laser_driver(){
   
 	create_test_pattern();
         
-        SET_DDR(LASER);
+	SET_DDR(LASER);
         
-        SET_DDR(LASER_PWM);
+    SET_DDR(LASER_PWM);
 	OUTPUT_ON(LASER_PWM);
      
-        TCCR1B = 1; 
-
+    TCCR1B = 1;
 }
 
 void fill_laser_buffer(long distance){
-   
     if (distance == 0) {
-      laser_data[laser_data_position] = 0;
-      laser_data_position = 0;
+		data.positions[laser_data_position] = 0;
+		convert_positions_to_timings();
+    	laser_data_position = 0;
     } else {
-      laser_data[laser_data_position] = distance  * LASER_POINT_SCALER;
-      laser_data_position++;
+		data.positions[laser_data_position] = distance;
+		laser_data_position++;
     }
     delay(1);
-    
+}
+
+void convert_positions_to_timings() {
+	for(int i = 0; i < laser_data_position; ++i) {
+		data.laser_timings[i] = data.positions[i] * LASER_POINT_SCALER;
+	}
+	data.laser_timings[laser_data_position] = 0;
 }
 
 // Turn Laser Timer on and activate Opto Capture

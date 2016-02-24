@@ -1,11 +1,7 @@
 #ifndef STEPPERCONTROLLER_H
 #define STEPPERCONTROLLER_H
 
-#if ARDUINO >= 100
 #include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 
 // Helper Macro degrees to Microseconds for Timer2 Servo
 #define degreesToMS( _degrees) (_degrees * 6 + 900)

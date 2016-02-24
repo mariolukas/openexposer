@@ -1,13 +1,16 @@
 #ifndef LASERDRIVER_H
 #define LASERDRIVER_H
-#if ARDUINO >= 100
-#include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 
+#include <Arduino.h>
+
+#include "configuration.h"
 
 extern uint8_t exposing_done;
+
+typedef union {
+    uint32_t positions[LASER_POSITIONS_BUFFER_SIZE];
+    uint16_t laser_timings[LASER_POSITIONS_BUFFER_SIZE];
+} laser_buffer_type;
 
 void init_laser_driver();
 void laser_on();
@@ -16,6 +19,7 @@ void expose_line(int time);
 void set_exposing_cycles(uint8_t cycles);
 void fill_laser_buffer(long distance);
 void create_test_pattern();
+void convert_positions_to_timings();
 
 #endif
 

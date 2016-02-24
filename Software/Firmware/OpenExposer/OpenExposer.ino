@@ -1,5 +1,4 @@
 #include "configuration.h"
-#include <Servo.h>
 #include "LaserDriver.h"
 #include "MotorDriver.h"
 #include "Interpreter.h"
@@ -7,8 +6,6 @@
 void setup(){
   
   
-  Servo vat_servo;
-   
   Serial.begin(BAUD);
   
   init_motor_driver();
