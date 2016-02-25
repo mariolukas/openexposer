@@ -11,8 +11,7 @@ laser_buffer_type laser_buffer;
 
 static_assert(LASER_POSITIONS_BUFFER_SIZE <= 255, "Maximum buffer size given by type uint8_t (must be <= 255).");
 
-uint16_t offset = 2000ul;
-uint16_t begin_delay = 3800+offset;
+uint16_t begin_delay = 5800;
 uint16_t end_delay = 47500ul;
 uint16_t sync_timeout_delay = 60000ul;
 
