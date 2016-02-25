@@ -1,10 +1,15 @@
+#include <limits.h>
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "LaserDriver.h"
 #include <util/delay.h>
 
 
+
 laser_buffer_type laser_buffer;
+
+static_assert(LASER_POSITIONS_BUFFER_SIZE <= 255, "Maximum buffer size given by type uint8_t (must be <= 255).");
 
 uint16_t offset = 2000ul;
 uint16_t begin_delay = 3800+offset;
