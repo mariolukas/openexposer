@@ -462,6 +462,7 @@ class ScanlineGCoder(object):
                 x_distance = self._centered_x(point[0]) - x
                 self.coder.line_command(x_distance)
                 x = self._centered_x(point[0])
+            self.coder.line_command(0)
             self.coder.expose_command(self.s.exposingCycles)
             self.y = self._centered_y(line[0][1])
 
