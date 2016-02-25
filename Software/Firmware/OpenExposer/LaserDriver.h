@@ -5,8 +5,6 @@
 
 #include "configuration.h"
 
-extern uint8_t exposing_done;
-
 typedef union {
     long positions[LASER_POSITIONS_BUFFER_SIZE];
     uint16_t laser_timings[LASER_POSITIONS_BUFFER_SIZE];

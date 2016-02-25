@@ -17,16 +17,15 @@ long laser_timing_scale_dividend = LASER_TIMING_SCALE_DIVIDEND;
 long laser_timing_scale_divisor = LASER_TIMING_SCALE_DIVISOR;
 uint16_t laser_timing_center_offset = LASER_TIMING_CENTER_OFFSET;
 
-static uint8_t laser_state;
+
+enum class LaserState : uint8_t { WAITING_FOR_SYNC, READY_FOR_LINE };
+
+static LaserState laser_state;
 static uint16_t last_line_start;
 
 uint16_t exposing_cycles = 5;
 uint16_t exposed_cycles = 0;
 volatile uint8_t exposing = 0;
-
-
-#define LS_SYNC 0
-#define LS_LINE 1
 
 
 // Opto Capture ISR
@@ -44,7 +43,7 @@ ISR(TIMER1_CAPT_vect){
     OCR1B = start_time - 500;            //set up OCR1B to occur long enough before that to have the interrupt
 
                                          //routine ready and waiting for the OCR1A match
-    laser_state = LS_LINE;
+    laser_state = LaserState::READY_FOR_LINE;
 }
 
 void laser_write_line(){
@@ -76,7 +75,8 @@ void laser_write_line(){
 }
 
 ISR(TIMER1_COMPB_vect){
-    if(laser_state == LS_LINE){
+    if(laser_state == LaserState::READY_FOR_LINE){
+      
         TCCR1A = (1<<COM1A1) | (1<<FOC1A);
 	
         if(exposing){
@@ -107,7 +107,7 @@ ISR(TIMER1_COMPB_vect){
                                             //for the sync pulse that hits the opto
 	
 	OCR1A = last_line_start + end_delay;           //set up the time for the sync pulse
-	laser_state = LS_SYNC;              //tell ourselves that we are in "searching for sync" state
+	laser_state = LaserState::WAITING_FOR_SYNC;              //tell ourselves that we are in "searching for sync" state
 	OCR1B = last_line_start + sync_timeout_delay;  //set up a timeout for the sync pulse to occur
 		                                    //(which brings us back in to the interrupt handler to the
 		                                    //case below, because the ICR interrupt has not occured
