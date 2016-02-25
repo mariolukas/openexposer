@@ -7,8 +7,7 @@
 
 #include "OpenExposer/LaserDriver.h"
 
-extern laser_buffer_type data;
-extern size_t laser_data_position;
+extern laser_buffer_type laser_buffer;
 
 extern long laser_timing_scale_dividend;
 extern long laser_timing_scale_divisor;

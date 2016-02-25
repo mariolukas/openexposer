@@ -5,9 +5,12 @@
 
 #include "configuration.h"
 
-typedef union {
-    long positions[LASER_POSITIONS_BUFFER_SIZE];
-    uint16_t laser_timings[LASER_POSITIONS_BUFFER_SIZE];
+typedef struct {
+    uint8_t length;
+    union {
+        long positions[LASER_POSITIONS_BUFFER_SIZE];
+        uint16_t laser_timings[LASER_POSITIONS_BUFFER_SIZE];
+    };
 } laser_buffer_type;
 
 void init_laser_driver();
