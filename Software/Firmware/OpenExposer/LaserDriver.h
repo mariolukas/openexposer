@@ -15,8 +15,7 @@ typedef union {
 void init_laser_driver();
 void laser_on();
 void laser_off();
-void expose_line(int time);
-void set_exposing_cycles(uint8_t cycles);
+void expose_line(uint16_t cycles);
 void fill_laser_buffer(int32_t distance);
 void create_test_pattern();
 void convert_positions_to_timings();

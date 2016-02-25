@@ -121,9 +121,6 @@ void processCommand() {
   case 3:
      delay(parsenumber('D',0));
   break;
-  case  4:  
-      set_exposing_cycles(parsenumber('E',0));
-    break;  // dwell
   case 5:
       fill_laser_buffer(parsedistance('D',0));
     break;
