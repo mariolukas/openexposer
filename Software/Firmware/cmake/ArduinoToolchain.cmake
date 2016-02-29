@@ -40,9 +40,9 @@ if(NOT ARDUINO_SDK_PATH)
     set(ARDUINO_PATHS)
 
     foreach(DETECT_VERSION_MAJOR 1)
-        foreach(DETECT_VERSION_MINOR RANGE 6 0)
+        foreach(DETECT_VERSION_MINOR RANGE 9 0)
             list(APPEND ARDUINO_PATHS arduino-${DETECT_VERSION_MAJOR}.${DETECT_VERSION_MINOR})
-            foreach(DETECT_VERSION_PATCH  RANGE 3 0)
+            foreach(DETECT_VERSION_PATCH  RANGE 9 0)
                 list(APPEND ARDUINO_PATHS arduino-${DETECT_VERSION_MAJOR}.${DETECT_VERSION_MINOR}.${DETECT_VERSION_PATCH})
             endforeach()
         endforeach()
@@ -56,7 +56,8 @@ if(NOT ARDUINO_SDK_PATH)
         file(GLOB SDK_PATH_HINTS /usr/share/arduino*
             /opt/local/arduino*
             /opt/arduino*
-            /usr/local/share/arduino*)
+            /usr/local/share/arduino*
+            $ENV{HOME}/arduino*)
     elseif(WIN32)
         set(SDK_PATH_HINTS "C:\\Program Files\\Arduino"
             "C:\\Program Files (x86)\\Arduino"

@@ -34,7 +34,8 @@ add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 # Test
 #-------------------
 enable_testing()
-set(PROJECT_TEST_NAME ${PROJECT_NAME}_test)
+set(PROJECT_TEST_NAME ${PROJECT_NAME}Tests)
+
 include_directories(${GTEST_INCLUDE_DIRS} ${TEST_INCLUDES} ${PROJECT_TEST_DIR})
 set(TEST_SRC_FILES test/TestLaserDriver.cpp test/FakeSerial.cpp test/ArduinoSymbols.cpp)
 add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
@@ -60,12 +61,14 @@ endif()
 
 target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
-add_test(test1 ${PROJECT_TEST_NAME})
+add_test(OpenExposerTests ${PROJECT_TEST_NAME})
 
-set(OpenExposer_PREFIX ${CMAKE_BINARY_DIR}/OpenExposer_Firmware)
+set(OpenExposer_PREFIX ${CMAKE_BINARY_DIR}/OpenExposerFirmware)
 
 include(ExternalProject)
 
-ExternalProject_Add(OpenExposer_Firmware
+ExternalProject_Add(OpenExposerFirmware
         SOURCE_DIR ${OpenExposer_SOURCE_DIR}/OpenExposer
         )
+
+install(CODE "MESSAGE(\"Not installing.\")")

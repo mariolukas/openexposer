@@ -4,9 +4,12 @@ set(PROJECT_NAME OpenExposer)
 project(${PROJECT_NAME})
 
 set(${CMAKE_PROJECT_NAME}_SKETCH OpenExposer.ino)
+
 generate_arduino_firmware(${CMAKE_PROJECT_NAME})
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    add_definitions(-Wall -Wno-deprecated)
+    add_definitions(-Wall -Wno-deprecated -std=c++11)
 endif()
+
+install(CODE "MESSAGE(\"Not installing the firmware.\")")
