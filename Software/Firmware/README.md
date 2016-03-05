@@ -69,15 +69,6 @@ Now you can create the firmware with the command:
     [100%] Built target OpenExposerFirmware
 
 The hex-file named `ÒpenExposerFirmware.hex` can be found in the build directory.
-If make can't find your arduino sdk, it complains with an error message:
-
-    [ 21%] Performing configure step for 'OpenExposerFirmware'
-    CMake Error at /home/christoph/Documents/Projects/openexposer/Software/Firmware/cmake/ArduinoToolchain.cmake:83 (message):
-      Could not find Arduino SDK (set ARDUINO_SDK_PATH)!
-
-
-
-
 
 In order to run the tests, you call make with the arguments:
 
@@ -95,6 +86,15 @@ In order to run the tests, you call make with the arguments:
     100% tests passed, 0 tests failed out of 1
     
     Total Test time (real) =   0.01 sec
+
+## Troubleshooting
+If make can't find your arduino sdk, it complains with an error message:
+
+    [ 21%] Performing configure step for 'OpenExposerFirmware'
+    CMake Error at /home/christoph/Documents/Projects/openexposer/Software/Firmware/cmake/ArduinoToolchain.cmake:83 (message):
+      Could not find Arduino SDK (set ARDUINO_SDK_PATH)!
+
+You can solve this issue by exporting an environment variable `ARDUINO_SDK_PATH`which contains the path of the arduino sdk.
 
 
 
