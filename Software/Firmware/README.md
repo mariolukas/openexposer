@@ -96,5 +96,7 @@ If make can't find your arduino sdk, it complains with an error message:
 
 You can solve this issue by exporting an environment variable `ARDUINO_SDK_PATH`which contains the path of the arduino sdk.
 
+    $ export ARDUINO_SDK_PATH=<here the path to arduino>
+    
 
 
