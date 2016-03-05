@@ -70,7 +70,7 @@ uint8_t direction(long distance){
 }
 
 
-void step(AccelStepper motor, float steps, float speed_value, float acceleration){
+void step(AccelStepper motor, float steps, float speed_value, float){
       
       motor.moveTo(motor.currentPosition()+steps);
       motor.setSpeed(speed_value);

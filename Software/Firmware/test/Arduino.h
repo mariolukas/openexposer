@@ -16,17 +16,19 @@
 #define F(x) x
 #define ISR(x) void x()
 
-#define delay(x)
-#define digitalWrite(x, y)
-#define digitalRead(x) LOW
-#define pinMode(x, y)
-#define delayMicroseconds(x)
-#define micros() 0
-
 typedef bool boolean;
 
 #define HIGH 1
 #define LOW 0
+
+void delay(long time);
+void digitalWrite(int pin, boolean value);
+boolean digitalRead(int pin);
+
+#define pinMode(x, y)
+#define delayMicroseconds(x)
+#define micros() 0
+
 
 #define A0 14
 #define A1 15

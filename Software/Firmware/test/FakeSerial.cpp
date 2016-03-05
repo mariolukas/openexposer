@@ -5,42 +5,42 @@ FakeSerial Serial;
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-size_t FakeSerial::print(const char str[])
+size_t FakeSerial::print(const char [])
 {
   return 0;
 }
 
-size_t FakeSerial::print(char c)
+size_t FakeSerial::print(char)
 {
   return 0;
 }
 
-size_t FakeSerial::print(unsigned char b, int base)
+size_t FakeSerial::print(unsigned char, int)
 {
   return 0;
 }
 
-size_t FakeSerial::print(int n, int base)
+size_t FakeSerial::print(int, int)
 {
   return 0;
 }
 
-size_t FakeSerial::print(unsigned int n, int base)
+size_t FakeSerial::print(unsigned int, int)
 {
   return 0;
 }
 
-size_t FakeSerial::print(long n, int base)
+size_t FakeSerial::print(long, int)
 {
   return 0;
 }
 
-size_t FakeSerial::print(unsigned long n, int base)
+size_t FakeSerial::print(unsigned long, int)
 {
   return 0;
 }
 
-size_t FakeSerial::print(double n, int digits)
+size_t FakeSerial::print(double, int)
 {
   return 0;
 }
@@ -50,42 +50,42 @@ size_t FakeSerial::println(void)
   return 0;
 }
 
-size_t FakeSerial::println(const char c[])
+size_t FakeSerial::println(const char[])
 {
   return 0;
 }
 
-size_t FakeSerial::println(char c)
+size_t FakeSerial::println(char)
 {
   return 0;
 }
 
-size_t FakeSerial::println(unsigned char b, int base)
+size_t FakeSerial::println(unsigned char, int)
 {
   return 0;
 }
 
-size_t FakeSerial::println(int num, int base)
+size_t FakeSerial::println(int, int)
 {
   return 0;
 }
 
-size_t FakeSerial::println(unsigned int num, int base)
+size_t FakeSerial::println(unsigned int, int)
 {
   return 0;
 }
 
-size_t FakeSerial::println(long num, int base)
+size_t FakeSerial::println(long, int)
 {
   return 0;
 }
 
-size_t FakeSerial::println(unsigned long num, int base)
+size_t FakeSerial::println(unsigned long, int)
 {
   return 0;
 }
 
-size_t FakeSerial::println(double num, int digits)
+size_t FakeSerial::println(double, int)
 {
   return 0;
 }

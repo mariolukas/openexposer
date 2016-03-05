@@ -351,16 +351,16 @@ void AccelStepper::setOutputPins(uint8_t mask)
 {
     uint8_t numpins = 2;
     if (_interface == FULL4WIRE || _interface == HALF4WIRE)
-	numpins = 4;
+	    numpins = 4;
     else if (_interface == FULL3WIRE || _interface == HALF3WIRE)
-	numpins = 3;
+	    numpins = 3;
     uint8_t i;
     for (i = 0; i < numpins; i++)
-	digitalWrite(_pin[i], (mask & (1 << i)) ? (HIGH ^ _pinInverted[i]) : (LOW ^ _pinInverted[i]));
+	    digitalWrite(_pin[i], (mask & (1 << i)) ? (HIGH ^ _pinInverted[i]) : (LOW ^ _pinInverted[i]));
 }
 
 // 0 pin step function (ie for functional usage)
-void AccelStepper::step0(long step)
+void AccelStepper::step0(long)
 {
   if (_speed > 0)
     _forward();
@@ -371,7 +371,7 @@ void AccelStepper::step0(long step)
 // 1 pin step function (ie for stepper drivers)
 // This is passed the current step number (0 to 7)
 // Subclasses can override
-void AccelStepper::step1(long step)
+void AccelStepper::step1(long)
 {
     // _pin[0] is step, _pin[1] is direction
     setOutputPins(_direction ? 0b10 : 0b00); // Set direction first else get rogue pulses
