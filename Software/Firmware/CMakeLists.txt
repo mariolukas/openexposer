@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.8.8)
 set(PROJECT_NAME OpenExposer)
-project(${PROJECT_NAME})
-
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-Wall -Wno-deprecated)
 endif()
+
+project(${PROJECT_NAME})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -pthread")
 
@@ -67,8 +67,12 @@ set(OpenExposer_PREFIX ${CMAKE_BINARY_DIR}/OpenExposerFirmware)
 
 include(ExternalProject)
 
+message(STATUS "Using Prefix ${OpenExposer_PREFIX}")
+
 ExternalProject_Add(OpenExposerFirmware
+        PREFIX ${OpenExposer_PREFIX}
         SOURCE_DIR ${OpenExposer_SOURCE_DIR}/OpenExposer
+        CMAKE_ARGS -DBINARY_DIRECTORY=${CMAKE_BINARY_DIR}
         )
 
 install(CODE "MESSAGE(\"Not installing.\")")

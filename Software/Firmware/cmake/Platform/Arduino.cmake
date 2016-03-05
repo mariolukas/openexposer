@@ -1150,7 +1150,6 @@ function(setup_arduino_target TARGET_NAME BOARD_ID ALL_SRCS ALL_LIBS COMPILE_FLA
                                 -P ${ARDUINO_SIZE_SCRIPT}
                         DEPENDS ${TARGET_NAME}
                         COMMENT "Calculating ${TARGET_NAME} image size")
-
 endfunction()
 
 #=============================================================================#

@@ -11,6 +11,13 @@ set(CMAKE_SYSTEM_NAME Arduino)
 set(CMAKE_C_COMPILER   avr-gcc)
 set(CMAKE_CXX_COMPILER avr-g++)
 
+
+if(DEFINED ENV{ARDUINO_SDK_PATH})
+    message(STATUS "Using ARDUINO_SDK_PATH from Environment $ENV{ARDUINO_SDK_PATH}.")
+    set(ARDUINO_SDK_PATH "$ENV{ARDUINO_SDK_PATH}")
+endif()
+
+
 # Add current directory to CMake Module path automatically
 if(EXISTS  ${CMAKE_CURRENT_LIST_DIR}/Platform/Arduino.cmake)
     set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR})
@@ -75,6 +82,7 @@ find_path(ARDUINO_SDK_PATH
                         ${ARDUINO_PATHS}
           HINTS ${SDK_PATH_HINTS}
           DOC "Arduino SDK path.")
+
 
 if(ARDUINO_SDK_PATH)
     list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${ARDUINO_SDK_PATH}/hardware/tools/avr)
