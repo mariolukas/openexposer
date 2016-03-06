@@ -27,38 +27,24 @@
 #include <stdint.h>
 
 /* Timer 1 */
-uint16_t ICR1 = 0;
+extern uint16_t ICR1;
 #define ICR1L   *((uint8_t*) (void*) &ICR1);
 #define ICR1H   *((uint8_t*) ((void*) &ICR1) + 1);
 
-uint16_t OCR1B = 0;
+extern uint16_t OCR1B;
 #define OCR1BL   *((uint8_t*) (void*) &OCR1B);
 #define OCR1BH   *((uint8_t*) ((void*) &OCR1B) + 1);
 
-uint16_t OCR1A = 0;
+extern uint16_t OCR1A;
 #define OCR1AL   *((uint8_t*) (void*) &OCR1A);
 #define OCR1AH   *((uint8_t*) ((void*) &OCR1A) + 1);
 
-uint16_t TCNT1 = 0;
+extern uint16_t TCNT1;
 #define TCNT1L   *((uint8_t*) (void*) &TCNT1);
 #define TCNT1H   *((uint8_t*) ((void*) &TCNT1) + 1);
 
-uint8_t TCCR1B = 0;
-uint8_t TCCR1A = 0;
-
-uint8_t SFIOR = 0;
-
-uint8_t OSCCAL = 0;
-#define OCDR    OSCCAL
-
-
-/* Timer 2 */
-uint8_t OCR2 = 0;
-uint8_t TCNT2 = 0;
-uint8_t TCCR2 = 0;
-
-uint8_t TCCR2B = 0;
-uint8_t TCCR2A = 0;
+extern uint8_t TCCR1B;
+extern uint8_t TCCR1A;
 
 /* TCCR1A */
 #define COM1A1  7
@@ -80,10 +66,24 @@ uint8_t TCCR2A = 0;
 #define OCIE0   1
 #define TOIE0   0
 
-uint8_t TIMSK1 = 0;
-uint8_t TIFR1 = 0;
+extern uint8_t TIMSK1;
+extern uint8_t TIFR1;
+
+
+/* Timer 2 */
+extern uint8_t OCR2;
+extern uint8_t TCNT2;
+extern uint8_t TCCR2;
+
+extern uint8_t TCCR2B;
+extern uint8_t TCCR2A;
 
 #define OCF1A   4
+extern uint8_t SFIOR;
+
+extern uint8_t OSCCAL;
+#define OCDR    OSCCAL
+
 
 
 /* TIFR */

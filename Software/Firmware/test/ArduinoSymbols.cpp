@@ -25,6 +25,30 @@
 
 #include <Arduino.h>
 
+
+/* Timer 1 */
+uint16_t ICR1 = 0;
+uint16_t OCR1B = 0;
+uint16_t OCR1A = 0;
+uint16_t TCNT1 = 0;
+uint8_t TCCR1B = 0;
+uint8_t TCCR1A = 0;
+uint8_t TIMSK1 = 0;
+uint8_t TIFR1 = 0;
+
+
+/* Timer 2 */
+uint8_t OCR2 = 0;
+uint8_t TCNT2 = 0;
+uint8_t TCCR2 = 0;
+
+uint8_t TCCR2B = 0;
+uint8_t TCCR2A = 0;
+
+uint8_t SFIOR = 0;
+
+uint8_t OSCCAL = 0;
+
 void delay(long) {
 
 }

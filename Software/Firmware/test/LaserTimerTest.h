@@ -21,4 +21,25 @@
  * @license GPL-3.0+ <http://opensource.org/licenses/GPL-3.0>
  */
 
-#include "LaserTimer.h"
+#ifndef OPENEXPOSER_TESTLASERTIMER_H
+#define OPENEXPOSER_TESTLASERTIMER_H
+
+#include "gtest/gtest.h"
+
+#include "OpenExposer/LaserTimer.h"
+
+class LaserTimerTest : public ::testing::Test
+{
+protected:
+    LaserTimer laserTimer;
+
+    virtual void SetUp()
+    {
+    }
+
+    virtual void TearDown()
+    {
+    }
+};
+
+#endif //OPENEXPOSER_TESTLASERTIMER_H

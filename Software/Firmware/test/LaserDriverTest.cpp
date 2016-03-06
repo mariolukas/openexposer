@@ -21,7 +21,7 @@
  * @license GPL-3.0+ <http://opensource.org/licenses/GPL-3.0>
  */
 
-#include "TestLaserDriver.h"
+#include "LaserDriverTest.h"
 
 #include "gtest/gtest.h"
 

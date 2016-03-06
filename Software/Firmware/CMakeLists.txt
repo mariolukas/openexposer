@@ -36,7 +36,7 @@ enable_testing()
 set(PROJECT_TEST_NAME ${PROJECT_NAME}Tests)
 
 include_directories(${GTEST_INCLUDE_DIRS} ${TEST_INCLUDES} ${PROJECT_TEST_DIR})
-set(TEST_SRC_FILES test/TestLaserDriver.cpp test/FakeSerial.cpp test/ArduinoSymbols.cpp OpenExposer/LaserTimer.cpp OpenExposer/LaserTimer.h)
+set(TEST_SRC_FILES test/LaserDriverTest.cpp test/FakeSerial.cpp test/ArduinoSymbols.cpp test/LaserTimerTest.cpp test/LaserTimerTest.h)
 add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
 add_dependencies(${PROJECT_TEST_NAME} googletest)
 
