@@ -21,23 +21,13 @@
  * @license GPL-3.0+ <http://opensource.org/licenses/GPL-3.0>
  */
 
-#include <stdint.h>
+#ifndef OPENEXPOSER_LASERTIMER_H
+#define OPENEXPOSER_LASERTIMER_H
 
-#include <Arduino.h>
 
-void delay(long) {
+class LaserTimer {
 
-}
+};
 
-void digitalWrite(int, boolean) {
 
-}
-
-boolean digitalRead(int) {
-    return LOW;
-}
-
-uint8_t DDRB = 0;
-uint8_t PORTB = 0;
-uint8_t DDRD = 0;
-uint8_t PORTD = 0;
+#endif //OPENEXPOSER_LASERTIMER_H
