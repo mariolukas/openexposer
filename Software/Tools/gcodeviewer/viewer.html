@@ -71,7 +71,7 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
               $scope.layers[layer] = [];
             } else if(line.indexOf("G01 Y") == 0) {
               // adjust Y position
-              var remainingString = line.substring(5);
+              var remainingString = line.substring(5).replace(';','');
               var yDistance = Number(remainingString);
               lineSpacings.unshift(yDistance);
               yPosition += yDistance;
@@ -82,7 +82,7 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
                 minY = yPosition;
               }
               xPosition = 0;
-            } else if(line.indexOf("G06 E") == 0) {
+            } else if(line.indexOf("G06") == 0) {
               if(lineFinished) {
                 console.error("Error in line "+i+": line finished without started");
               } else {
@@ -96,8 +96,11 @@ gcodeViewApp.controller('GCodeController', ['$scope', function ($scope) {
               if(lineFinished) {
                 lineFinished = false;
               }
-              var remainingString = line.substring(5);
+              var remainingString = line.substring(5).replace(';','');
               var xDistance = Number(remainingString);
+              if(xDistance == 0) {
+              	continue;
+              }
               if(lineOpen) {
                 $scope.layers[layer].unshift({y:yPosition, x1:xPosition, x2: xPosition+xDistance});
                 lineOpen = false;

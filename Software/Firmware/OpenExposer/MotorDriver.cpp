@@ -117,7 +117,7 @@ void do_move(float y_distance, float z_distance, float feedrate){
     if(y_distance != 0){
       
       enable_y_motor();
-      step(y, y_distance*Y_STEPS_PER_MM, y_speed, y_acceleration);
+      step(y, y_distance*Y_STEPS_PER_MM/1000, y_speed, y_acceleration);
       //motors_release();
       //release_y_motor();
     }
@@ -125,7 +125,7 @@ void do_move(float y_distance, float z_distance, float feedrate){
     if(z_distance != 0){
       enable_z_motor();
       //motors_enable();
-      step(z, z_distance*Z_STEPS_PER_MM, z_speed, z_acceleration);
+      step(z, z_distance*Z_STEPS_PER_MM/1000, z_speed, z_acceleration);
       //release_z_motor();
       //motors_release();
     }

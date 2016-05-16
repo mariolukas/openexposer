@@ -30,25 +30,25 @@ class LaserTimer
 {
 
 public:
-    void startTimer();
-    void setValue(uint16_t value);
-    void disableTimerPin();
-    void forceClearPinOnMatch();
-    void setOnCompareMatch();
-    void toggleOnCompareMatch();
-    void enableInputCapture();
-    void disableInputCapture();
-    void clearInputCaptureFlag();
-    void clearInputCaptureAndOutputCompareBFlag();
-    uint16_t getInputCaptureTime();
-    void enableInputCaptureAndOutputCompareBInterrupt();
-    void disableInputCaptureAndOutputCompareBInterrupt();
-    void setOutputCompareRegisterA(uint16_t value);
-    uint16_t getOutputCompareRegisterA();
-    void addToOutputCompareRegisterA(uint16_t value);
-    void setOutputCompareRegisterB(uint16_t value);
-    uint16_t getOutputCompareRegisterB();
-    void waitForCompareRegisterAMatch();
+    static void startTimer() __attribute__((always_inline));
+    static void setValue(uint16_t value) __attribute__((always_inline));
+    static void disableTimerPin() __attribute__((always_inline));
+    static void forceClearPinOnMatch() __attribute__((always_inline));
+    static void setOnCompareMatch() __attribute__((always_inline));
+    static void toggleOnCompareMatch() __attribute__((always_inline));
+    static void enableInputCapture() __attribute__((always_inline));
+    static void disableInputCapture() __attribute__((always_inline));
+    static void clearInputCaptureFlag() __attribute__((always_inline));
+    static void clearInputCaptureAndOutputCompareBFlag() __attribute__((always_inline));
+    static uint16_t getInputCaptureTime() __attribute__((always_inline));
+    static void enableInputCaptureAndOutputCompareBInterrupt() __attribute__((always_inline));
+    static void disableInputCaptureAndOutputCompareBInterrupt() __attribute__((always_inline));
+    static void setOutputCompareRegisterA(uint16_t value) __attribute__((always_inline));
+    static uint16_t getOutputCompareRegisterA() __attribute__((always_inline));
+    static void addToOutputCompareRegisterA(uint16_t value) __attribute__((always_inline));
+    static void setOutputCompareRegisterB(uint16_t value) __attribute__((always_inline));
+    static uint16_t getOutputCompareRegisterB() __attribute__((always_inline));
+    static void waitForCompareRegisterAMatch() __attribute__((always_inline));
 };
 
 inline void LaserTimer::startTimer()

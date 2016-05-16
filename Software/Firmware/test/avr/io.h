@@ -67,7 +67,7 @@ extern uint8_t TCCR1A;
 #define TOIE0   0
 
 extern uint8_t TIMSK1;
-extern uint8_t TIFR1;
+extern volatile uint8_t TIFR1;
 
 
 /* Timer 2 */

@@ -140,21 +140,24 @@ void processCommand() {
   case  0: // move linear
   case  1: // move linear
       // Move Linear here
-      do_move(parsenumber('Y',0), parsenumber('Z',0), parsenumber('F',30000));
+      //do_move(parsenumber('Y',0), parsenumber('Z',0), parsenumber('F',30000));
     break;
   case 3:
      delay(parsenumber('D',0));
   break;
+  case 4:  
+      set_exposing_cycles(parsenumber('E',0));
+    break;  // dwell  
   case 5:
       fill_laser_buffer(parsedistance('D',0));
     break;
   case 6:
-      delay(20);
-      expose_line(parsenumber('E',1000));
+      expose_line();
     break;
   case 7:
+       set_exposing_cycles(5000);
        create_test_pattern();
-       expose_line(parsenumber('E',50000));
+       expose_line();
      break;  
   case 29:
       //home z- axis

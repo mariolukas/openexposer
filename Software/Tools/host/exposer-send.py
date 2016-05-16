@@ -2,6 +2,9 @@ import serial
 import time
 import optparse
 
+
+SERIAL_PORT = '/dev/ttyUSB0'
+
 def main():
 
     parser = optparse.OptionParser("exposer-send <options>");
@@ -10,7 +13,7 @@ def main():
     (options, target) = parser.parse_args()
 
     # Open serial port
-    s = serial.Serial("/dev/tty.usbserial-AH00ZJP0",9600)
+    s = serial.Serial(SERIAL_PORT, 9600)
 
     # Open g-code file
     f = open(options.g_code_file,'r');

@@ -187,7 +187,7 @@ DEFAULT_SETTINGS = [
      [
          RangeSettingFloat('scanlineSpacing', 'Scanline distance', default=0.1, low=0.001, high=1, step=0.001,
                            description='Spacing between the individual scanlines', arg='scanline_spacing'),
-         RangeSettingInt('exposingCycles', 'Exposing cycles', default=10, low=1, high=100, step=1,
+         RangeSettingInt('exposingCycles', 'Exposing cycles', default=10, low=1, high=10000, step=1,
                          description='Number of exposing cycles for each line', arg='scanline_cycles'),
      ]
      )

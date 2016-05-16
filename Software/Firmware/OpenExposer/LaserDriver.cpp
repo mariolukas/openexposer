@@ -41,7 +41,7 @@ uint16_t laser_timing_center_offset = LASER_TIMING_CENTER_OFFSET;
 
 enum class LaserState : uint8_t { WAITING_FOR_SYNC, READY_FOR_LINE };
 
-static LaserState laser_state;
+volatile static LaserState laser_state;
 static uint16_t last_line_start;
 
 uint16_t exposing_cycles = 5;
@@ -52,8 +52,10 @@ LaserTimer laserTimer;
 
 // Opto Capture ISR
 ISR(TIMER1_CAPT_vect){
+//Serial.println("Opto");
+// Serial.print(".");
 	last_line_start = laserTimer.getInputCaptureTime();         // save current counter value
-//	last_line_start = ICR1;         // save current counter value
+    //last_line_start = ICR1;         // save current counter value
 
 	laserTimer.forceClearPinOnMatch();
 	//TCCR1A = (1<<COM1A1) ;                //turn off output on compare match
@@ -63,8 +65,8 @@ ISR(TIMER1_CAPT_vect){
 	laserTimer.disableInputCapture();
 	//TIMSK1 &= ~(1<<ICIE1); //turn ourselves off
 
-	uint16_t start_time = last_line_start + begin_delay;   //calculate at which timer value to begin lasering
-	//uint16_t start_time = ICR1 + begin_delay;   //calculate at which timer value to begin lasering
+	//uint16_t start_time = last_line_start + begin_delay;   //calculate at which timer value to begin lasering
+	uint16_t start_time = ICR1 + begin_delay;   //calculate at which timer value to begin lasering
 	laserTimer.setOutputCompareRegisterA(start_time);
 	//OCR1A = start_time;                         //set OCR1A to that value (this is used from laser write line)
 	laserTimer.setOutputCompareRegisterB(start_time - 500);
@@ -84,12 +86,13 @@ void laser_write_line(){
 	//TIFR1 = (1<<OCF1A);
 
 	laserTimer.toggleOnCompareMatch();
-	//TCCR1A = (1<<COM1A0); //Toggle  laser on compare match from now
+    //TCCR1A = (1<<COM1A0); //Toggle  laser on compare match from now
 
 	do {
 		laserTimer.waitForCompareRegisterAMatch();
 		//while ((TIFR1 & (1 << OCF1A)) == 0);  //and wait for it...
 		//TIFR1 = (1 << OCF1A);
+ //Serial.print(".");
 
 		uint16_t tmp = *timings++;
 
@@ -99,14 +102,17 @@ void laser_write_line(){
 		laserTimer.addToOutputCompareRegisterA(tmp);
 		//OCR1A += tmp;                   //no: delay that amount
 	} while(1);
+//Serial.println("");
 }
 
-ISR(TIMER1_COMPB_vect){
-	if(laser_state == LaserState::READY_FOR_LINE){
+ISR(TIMER1_COMPB_vect){   
+   if(laser_state == LaserState::READY_FOR_LINE){
 
 		TCCR1A = (1<<COM1A1) | (1<<FOC1A);
 	
 		if(exposing){
+//            Serial.print("Exposing ");
+//            Serial.println(exposed_cycles);
 			laser_write_line();
 			++exposed_cycles;
 		} else {
@@ -147,6 +153,7 @@ ISR(TIMER1_COMPB_vect){
 
 
 	} else {
+//        Serial.println("Missing sync");
 
 	    // WAITING_FOR_SYNC (we have missed the sync pulse)
 		laserTimer.forceClearPinOnMatch();
@@ -170,42 +177,90 @@ ISR(TIMER1_COMPB_vect){
 
 // fill data table with test pattern
 void create_test_pattern(){
-
-	for(int i=0; i < 80; ++i){
-		laser_buffer.laser_timings[i] = 500-i;
+#define TEST_BLOCKS 32
+	for(int i=0; i < TEST_BLOCKS; ++i){
+//        laser_buffer.laser_timings[i] = 500;
+        laser_buffer.positions[i] = (i==0) ? (2000 * (i-TEST_BLOCKS/2)) : 2000;
 	}
-	laser_buffer.laser_timings[81] = 0;
-    laser_buffer.length = 0;
+//    laser_buffer.laser_timings[80] = 0;
+    laser_buffer.positions[TEST_BLOCKS] = 0;
+    laser_buffer.length = TEST_BLOCKS;
 }
 
-void expose_line(uint16_t cycles) {
-	exposing_cycles = cycles;
-	exposed_cycles = 0;
+void set_exposing_cycles(uint16_t cycles) {
+    exposing_cycles = cycles;
+}
 
-	exposing = 1;
+void expose_line() {
+    convert_laser_buffer();
+    exposed_cycles = 0;
+
+    exposing = 1;
+    //Serial.println("Start exposing");
    
-	while(exposing);
+    while(exposing);
+
+    laser_buffer.length = 0;
+    //Serial.println("Raus");
 }
 
 // initialize laser 
 void init_laser_driver(){
   
-	create_test_pattern();
-
 	SET_DDR(LASER);
 
-	SET_DDR(LASER_PWM);
-	OUTPUT_ON(LASER_PWM);
+    pinMode(LASER_ENABLE_PIN, OUTPUT);
+    digitalWrite(LASER_ENABLE_PIN, HIGH);
+    
+    SET_DDR(LASER_PWM);
+    OUTPUT_ON(LASER_PWM);
 
 	laserTimer.startTimer();
 	//TCCR1B = 1;
+
+    laser_state = LaserState::WAITING_FOR_SYNC;
+    laserTimer.enableInputCapture();
 }
 
+void convert_positions_to_timings() {
+	long current_position = 0;
+    long distance = 0;
+    uint16_t timing;
+    //Serial.println("--");
+	for(int i = 0; i < laser_buffer.length; ++i) {
+        distance = laser_buffer.positions[i];
+        current_position += laser_buffer.positions[i];
+        timing = (uint16_t) ((distance * laser_timing_scale_dividend) / laser_timing_scale_divisor);
+        if(i == 0) {
+            timing += laser_timing_center_offset;
+        }
+        /*
+        Serial.print(current_position);
+        Serial.print(";");
+        Serial.print(distance);
+        Serial.print(";");
+        Serial.print(timing);
+        Serial.print("|");*/
+		laser_buffer.laser_timings[i] = timing;
+	}
+	laser_buffer.laser_timings[laser_buffer.length] = 0;
+}
+
+void convert_laser_buffer(){
+    if(!laser_buffer.contains_timings) {
+        laser_buffer.positions[laser_buffer.length] = 0;
+        convert_positions_to_timings();
+        laser_buffer.contains_timings = true;
+    }
+}
+ 
 void fill_laser_buffer(long distance){
-	if (distance == 0) {
-		laser_buffer.positions[laser_buffer.length] = 0;
-		convert_positions_to_timings();
+    if(laser_buffer.contains_timings) {
         laser_buffer.length = 0;
+        laser_buffer.contains_timings = false;
+    }
+	if (distance == 0) {
+//		convert_laser_buffer();
 	} else {
 		laser_buffer.positions[laser_buffer.length] = distance;
         ++laser_buffer.length;
@@ -213,18 +268,8 @@ void fill_laser_buffer(long distance){
 //    delay(1);
 }
 
-void convert_positions_to_timings() {
-	long current_position = 0;
-	for(int i = 0; i < laser_buffer.length; ++i) {
-		current_position += laser_buffer.positions[i];
-		laser_buffer.laser_timings[i] = current_position * laser_timing_scale_dividend / laser_timing_scale_divisor + laser_timing_center_offset;
-	}
-	laser_buffer.laser_timings[laser_buffer.length] = 0;
-}
-
 // Turn Laser Timer on and activate Opto Capture
 void laser_on(){
-
 	laserTimer.setValue(1);
 	//TCNT1 = 1;
 
